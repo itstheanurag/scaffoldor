@@ -1,0 +1,36 @@
+{
+  "name": "scaffoldor",
+  "version": "1.0.0",
+  "description": "Download templates from GitHub with ease",
+  "type": "module",
+  "main": "./dist/index.js",
+  "bin": {
+    "scaffoldor": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "dev": "tsup src/index.ts --format esm --watch",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": ["cli", "scaffold", "template", "generator"],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "files": ["dist"],
+  "dependencies": {
+    "commander": "^12.1.0",
+    "fs-extra": "^11.2.0",
+    "inquirer": "^12.3.2",
+    "picocolors": "^1.1.1",
+    "simple-git": "^3.27.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^22.10.2",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2"
+  }
+}
