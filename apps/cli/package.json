@@ -20,6 +20,7 @@
   },
   "files": ["dist"],
   "dependencies": {
+    "@repo/schema": "workspace:*",
     "commander": "^12.1.0",
     "fs-extra": "^11.2.0",
     "inquirer": "^12.3.2",
