@@ -1,135 +1,153 @@
-# Turborepo starter
+<p align="center">
+  <h1 align="center">Scaffoldor</h1>
+  <p align="center">
+    <strong>A CLI tool for downloading and sharing GitHub/GitLab templates</strong>
+  </p>
+  <p align="center">
+    Stop bookmarking template URLs. Start scaffolding with a single command.
+  </p>
+</p>
 
-This Turborepo starter is maintained by the Turborepo core team.
+<p align="center">
+  <a href="#features">Features</a> •
+  <a href="#installation">Installation</a> •
+  <a href="#quick-start">Quick Start</a> •
+  <a href="#usage">Usage</a> •
+  <a href="#contributing">Contributing</a>
+</p>
 
-## Using this example
+---
 
-Run the following command:
+## Features
 
-```sh
-npx create-turbo@latest
+- **One-command scaffolding** - Clone any template with `scaffoldor @template-name`
+- **Personal registry** - Save your favorite templates locally for quick access
+- **Package manager flexibility** - Automatically detects and lets you switch between npm, pnpm, yarn, or bun
+- **Clean starts** - Removes original git history and initializes a fresh repo
+- **Template directory** - Browse and discover popular templates (coming soon)
+
+## Installation
+
+```bash
+# Using npm
+npm install -g scaffoldor
+
+# Using bun
+bun install -g scaffoldor
+
+# Using pnpm
+pnpm install -g scaffoldor
+
+# Using yarn
+yarn global add scaffoldor
 ```
 
-## What's inside?
+## Quick Start
 
-This Turborepo includes the following packages/apps:
+```bash
+# Add a template from the registry
+scaffoldor add @nextjs-starter
 
-### Apps and Packages
+# Add with a specific package manager
+scaffoldor add @express-api --pm bun
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+# List all available templates
+scaffoldor list
 ```
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+## Usage
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
+### Add a Template
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
+Add a template from the centralized registry to your project:
+
+```bash
+scaffoldor add @<template-name> [options]
 ```
 
-### Develop
+**Options:**
 
-To develop all apps and packages, run the following command:
+- `--pm <manager>` - Package manager to use (`npm`, `pnpm`, or `bun`)
 
-```
-cd my-turborepo
+**Examples:**
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
+```bash
+# Add a Next.js template
+scaffoldor add @nextjs-basic
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
-```
+# Add with a specific package manager
+scaffoldor add @express-api --pm pnpm
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+# Add using bun and current directory
+scaffoldor add @fullstack-starter . --pm bun
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+# paste template inside a directory
+scaffoldor add @fullstack-starter test-app --pm bun
 
 ```
-cd my-turborepo
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
+### List Templates
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
+Browse all available templates in the registry:
+
+```bash
+scaffoldor list
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+**Output:**
 
 ```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
+Available Templates:
+@nextjs-basic [frontend] - Basic Next.js starter
+@express-api [backend] - Express.js REST API starter
+@fullstack-starter [fullstack] - Full-stack TypeScript template
 ```
 
-## Useful Links
+## How It Works
 
-Learn more about the power of Turborepo:
+1. **Centralized Registry**: Templates are curated in a community registry
+2. **Browse & Discover**: Use `list` to browse available templates
+3. **One-command Add**: Run `scaffoldor add @template-name` to scaffold
+4. **Package Manager**: Choose npm, pnpm, or bun with the `--pm` flag
+5. **Clean Slate**: Fresh project with your preferred setup
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+## Roadmap
+
+- [ ] **Centralized registry** - Community-curated template directory
+- [ ] **Template search** - Search templates directly from CLI
+- [ ] **Likes/ratings** - Discover popular templates
+- [ ] **Template updates** - Check for and apply template updates
+- [ ] **Custom registries** - Connect to private/enterprise registries
+
+## Project Structure
+
+This is a monorepo containing:
+
+| Package | Description |
+|---------|-------------|
+| `apps/cli` | The scaffoldor CLI tool |
+| `apps/web` | Web application for template directory |
+| `packages/ui` | Shared React components |
+| `packages/eslint-config` | Shared ESLint configuration |
+| `packages/typescript-config` | Shared TypeScript configuration |
+
+## Contributing
+
+We welcome contributions! See [CONTRIBUTING.md](./CONTRIBUTING.md) for:
+
+- Development setup
+- Project structure
+- Contribution guidelines
+- Code style
+
+For technical details, see [ARCHITECTURE.md](./ARCHITECTURE.md).
+
+## License
+
+MIT © Scaffoldor Contributors
+
+---
+
+<p align="center">
+  Made with for developers who love efficiency
+</p>
