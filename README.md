@@ -18,15 +18,15 @@
 
 ---
 
-## ✨ Features
+## Features
 
-- 🚀 **One-command scaffolding** - Clone any template with `scaffoldor @template-name`
-- 📚 **Personal registry** - Save your favorite templates locally for quick access
-- 🔄 **Package manager flexibility** - Automatically detects and lets you switch between npm, pnpm, yarn, or bun
-- 🎯 **Clean starts** - Removes original git history and initializes a fresh repo
-- 🌐 **Template directory** - Browse and discover popular templates (coming soon)
+- **One-command scaffolding** - Clone any template with `scaffoldor @template-name`
+- **Personal registry** - Save your favorite templates locally for quick access
+- **Package manager flexibility** - Automatically detects and lets you switch between npm, pnpm, yarn, or bun
+- **Clean starts** - Removes original git history and initializes a fresh repo
+- **Template directory** - Browse and discover popular templates (coming soon)
 
-## 📦 Installation
+## Installation
 
 ```bash
 # Using npm
@@ -42,71 +42,60 @@ pnpm install -g scaffoldor
 yarn global add scaffoldor
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
-# Add a template to your registry
-scaffoldor add nextjs-starter https://github.com/vercel/next.js/tree/canary/examples/hello-world -t frontend -d "Simple Next.js starter"
+# Add a template from the registry
+scaffoldor add @nextjs-starter
 
-# Scaffold the template
-scaffoldor @nextjs-starter my-new-project
+# Add with a specific package manager
+scaffoldor add @express-api --pm bun
 
-# List all your saved templates
+# List all available templates
 scaffoldor list
 ```
 
-## 📖 Usage
+## Usage
 
 ### Add a Template
 
-Save a GitHub/GitLab repository as a template in your local registry:
+Add a template from the centralized registry to your project:
 
 ```bash
-scaffoldor add <slug> <url> [options]
+scaffoldor add @<template-name> [options]
 ```
 
 **Options:**
-- `-t, --type <type>` - Template type (e.g., `frontend`, `backend`, `fullstack`) - default: `other`
-- `-d, --description <desc>` - Template description
+
+- `--pm <manager>` - Package manager to use (`npm`, `pnpm`, or `bun`)
 
 **Examples:**
+
 ```bash
 # Add a Next.js template
-scaffoldor add nextjs-basic https://github.com/user/nextjs-template -t frontend
+scaffoldor add @nextjs-basic
 
-# Add with description
-scaffoldor add express-api https://github.com/user/express-starter -t backend -d "Express.js REST API starter"
-```
+# Add with a specific package manager
+scaffoldor add @express-api --pm pnpm
 
-### Scaffold a Template
+# Add using bun and current directory
+scaffoldor add @fullstack-starter . --pm bun
 
-Clone a saved template to start a new project:
+# paste template inside a directory
+scaffoldor add @fullstack-starter test-app --pm bun
 
-```bash
-scaffoldor @<slug> [destination]
-```
-
-If no destination is provided, creates a folder named after the slug.
-
-**Examples:**
-```bash
-# Scaffold to a specific directory
-scaffoldor @nextjs-basic my-awesome-app
-
-# Scaffold to current naming convention
-scaffoldor @express-api
-# Creates ./express-api/
 ```
 
 ### List Templates
 
-View all templates in your registry:
+Browse all available templates in the registry:
 
 ```bash
 scaffoldor list
 ```
 
 **Output:**
+
 ```
 Available Templates:
 @nextjs-basic [frontend] - Basic Next.js starter
@@ -116,11 +105,11 @@ Available Templates:
 
 ## How It Works
 
-1. **Registry**: Templates are stored in a local `registry.json` file
-2. **Cloning**: Uses git to clone the repository
-3. **Clean slate**: Removes the original `.git` directory
-4. **Package manager**: Detects the lock file and prompts for your preferred package manager
-5. **Fresh start**: Initializes a new git repository
+1. **Centralized Registry**: Templates are curated in a community registry
+2. **Browse & Discover**: Use `list` to browse available templates
+3. **One-command Add**: Run `scaffoldor add @template-name` to scaffold
+4. **Package Manager**: Choose npm, pnpm, or bun with the `--pm` flag
+5. **Clean Slate**: Fresh project with your preferred setup
 
 ## Roadmap
 
@@ -145,6 +134,7 @@ This is a monorepo containing:
 ## Contributing
 
 We welcome contributions! See [CONTRIBUTING.md](./CONTRIBUTING.md) for:
+
 - Development setup
 - Project structure
 - Contribution guidelines
@@ -159,5 +149,5 @@ MIT © Scaffoldor Contributors
 ---
 
 <p align="center">
-  Made with ❤️ for developers who love efficiency
+  Made with for developers who love efficiency
 </p>
