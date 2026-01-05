@@ -7,9 +7,10 @@ const LOCAL_REGISTRY_PATH = path.join(process.cwd(), "registry.json");
 /**
  * Remote registry URL - can be overridden via environment variable
  */
+
 const REMOTE_REGISTRY_URL =
   process.env.SCAFFOLDOR_REGISTRY_URL ||
-  "https://raw.githubusercontent.com/scaffoldor/registry/main/registry.json";
+  "https://raw.githubusercontent.com/itstheanurag/scaffoldor/main/registry/registry.json";
 
 /**
  * Read the local registry file
