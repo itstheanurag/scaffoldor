@@ -20,6 +20,7 @@
         "scaffoldor": "./dist/index.js",
       },
       "dependencies": {
+        "@repo/schema": "workspace:*",
         "commander": "^12.1.0",
         "fs-extra": "^11.2.0",
         "inquirer": "^12.3.2",
@@ -69,6 +70,18 @@
         "globals": "^16.5.0",
         "typescript": "^5.9.2",
         "typescript-eslint": "^8.50.0",
+      },
+    },
+    "packages/schema": {
+      "name": "@repo/schema",
+      "version": "0.0.1",
+      "dependencies": {
+        "zod": "^3.24.1",
+      },
+      "devDependencies": {
+        "@repo/typescript-config": "workspace:*",
+        "tsup": "^8.4.0",
+        "typescript": "^5.7.3",
       },
     },
     "packages/typescript-config": {
@@ -343,6 +356,8 @@
     "@nolyfill/is-core-module": ["@nolyfill/is-core-module@1.0.39", "", {}, "sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA=="],
 
     "@repo/eslint-config": ["@repo/eslint-config@workspace:packages/eslint-config"],
+
+    "@repo/schema": ["@repo/schema@workspace:packages/schema"],
 
     "@repo/typescript-config": ["@repo/typescript-config@workspace:packages/typescript-config"],
 

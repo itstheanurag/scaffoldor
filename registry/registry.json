@@ -1,0 +1,133 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-01-05T15:21:00Z",
+  "templates": [
+    {
+      "slug": "nextjs-starter",
+      "name": "Next.js Starter",
+      "url": "https://github.com/vercel/next.js/tree/canary/examples/hello-world",
+      "platform": "github",
+      "type": "frontend",
+      "framework": "nextjs",
+      "description": "Official Next.js hello world example",
+      "tags": ["nextjs", "react", "typescript", "vercel"],
+      "features": ["App Router", "TypeScript", "ESLint"],
+      "author": {
+        "name": "Vercel",
+        "github": "vercel",
+        "url": "https://vercel.com"
+      },
+      "stats": {
+        "stars": 0,
+        "downloads": 0
+      },
+      "tier": "free",
+      "license": "MIT"
+    },
+    {
+      "slug": "vite-react",
+      "name": "Vite React",
+      "url": "https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts",
+      "platform": "github",
+      "type": "frontend",
+      "framework": "react",
+      "description": "React + TypeScript template powered by Vite",
+      "tags": ["vite", "react", "typescript", "fast"],
+      "features": ["Hot Module Replacement", "TypeScript", "ESLint"],
+      "author": {
+        "name": "Vite Team",
+        "github": "vitejs"
+      },
+      "stats": {
+        "stars": 0,
+        "downloads": 0
+      },
+      "tier": "free",
+      "license": "MIT"
+    },
+    {
+      "slug": "hono-starter",
+      "name": "Hono Starter",
+      "url": "https://github.com/honojs/starter",
+      "platform": "github",
+      "type": "backend",
+      "framework": "hono",
+      "description": "Ultrafast web framework for the Edge",
+      "tags": ["hono", "edge", "cloudflare", "bun", "deno"],
+      "features": ["Edge Runtime", "TypeScript", "Middleware"],
+      "author": {
+        "name": "Hono Team",
+        "github": "honojs"
+      },
+      "stats": {
+        "stars": 0,
+        "downloads": 0
+      },
+      "tier": "free",
+      "license": "MIT"
+    },
+    {
+      "slug": "elysia-starter",
+      "name": "Elysia Starter",
+      "url": "https://github.com/elysiajs/elysia",
+      "platform": "github",
+      "type": "backend",
+      "framework": "elysia",
+      "description": "Ergonomic framework for humans, built on Bun",
+      "tags": ["elysia", "bun", "typescript", "fast"],
+      "features": ["End-to-end Type Safety", "Swagger", "JWT"],
+      "author": {
+        "name": "Elysia Team",
+        "github": "elysiajs"
+      },
+      "stats": {
+        "stars": 0,
+        "downloads": 0
+      },
+      "tier": "free",
+      "license": "MIT"
+    },
+    {
+      "slug": "astro-starter",
+      "name": "Astro Starter",
+      "url": "https://github.com/withastro/astro/tree/main/examples/basics",
+      "platform": "github",
+      "type": "frontend",
+      "framework": "astro",
+      "description": "Build fast websites with Astro",
+      "tags": ["astro", "static", "islands", "performance"],
+      "features": ["Islands Architecture", "Zero JS by default", "SSG/SSR"],
+      "author": {
+        "name": "Astro Team",
+        "github": "withastro"
+      },
+      "stats": {
+        "stars": 0,
+        "downloads": 0
+      },
+      "tier": "free",
+      "license": "MIT"
+    },
+    {
+      "slug": "sveltekit-starter",
+      "name": "SvelteKit Starter",
+      "url": "https://github.com/sveltejs/kit/tree/main/packages/create-svelte/templates/default",
+      "platform": "github",
+      "type": "fullstack",
+      "framework": "sveltekit",
+      "description": "The fastest way to build Svelte apps",
+      "tags": ["svelte", "sveltekit", "typescript", "fullstack"],
+      "features": ["SSR", "File-based routing", "TypeScript"],
+      "author": {
+        "name": "Svelte Team",
+        "github": "sveltejs"
+      },
+      "stats": {
+        "stars": 0,
+        "downloads": 0
+      },
+      "tier": "free",
+      "license": "MIT"
+    }
+  ]
+}
