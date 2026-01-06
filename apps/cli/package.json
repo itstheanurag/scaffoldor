@@ -1,6 +1,6 @@
 {
   "name": "scaffoldor",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Download templates from GitHub with ease",
   "type": "module",
   "main": "./dist/index.js",
@@ -8,7 +8,7 @@
     "scaffoldor": "./dist/index.js"
   },
   "scripts": {
-    "build": "tsup src/index.ts --format esm --dts --clean",
+    "build": "tsup",
     "dev": "tsup src/index.ts --format esm --watch",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run build"
@@ -20,7 +20,6 @@
   },
   "files": ["dist"],
   "dependencies": {
-    "@repo/schema": "workspace:*",
     "commander": "^12.1.0",
     "fs-extra": "^11.2.0",
     "inquirer": "^12.3.2",
@@ -29,6 +28,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@repo/schema": "workspace:*",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.10.2",
     "tsup": "^8.3.5",
