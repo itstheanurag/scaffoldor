@@ -42,13 +42,13 @@ export function Navbar() {
   }, []);
 
   return (
-    <div className="fixed inset-x-0 top-0 z-50 flex justify-center pointer-events-none max-w-7xl mx-auto">
+    <div className="fixed inset-x-0 top-0 z-50 flex justify-center pointer-events-none max-w-7xl mx-auto p-3">
       <motion.nav
         variants={navVariants}
         initial="top"
         animate={scrolled ? "scrolled" : "top"}
         transition={{ duration: 0.25, ease: "easeOut" }}
-        className="pointer-events-auto w-full mx-auto rounded-xl border backdrop-blur-md"
+        className="pointer-events-auto w-full mx-auto rounded-xl border backdrop-blur-md p-3"
       >
         <div className="flex items-center justify-between">
           {/* Left */}
