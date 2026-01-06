@@ -4,7 +4,7 @@ import { FaCube, FaGithub } from "react-icons/fa";
 export function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-neutral-800/50 bg-neutral-950/80 backdrop-blur supports-[backdrop-filter]:bg-neutral-950/60">
-      <div className="container mx-auto flex h-14 items-center">
+      <div className="container mx-auto flex h-14 items-center max-w-7xl px-4">
         <div className="mr-4 hidden md:flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <FaCube className="h-6 w-6" />

@@ -1,43 +1,91 @@
+"use client";
+
 import Link from "next/link";
 import { FaTerminal } from "react-icons/fa";
+import { FaArrowRight } from "react-icons/fa6";
+import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { HeroTerminal } from "@/components/hero-terminal";
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden py-24 md:py-32 min-h-[90vh] flex flex-col items-center justify-center bg-background">
-      {/* Grid Pattern Background */}
-      <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]">
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background to-transparent" />
-      </div>
+    <section className="relative overflow-hidden bg-neutral-950 py-[clamp(4rem,8vw,8rem)]">
+      {/* Ambient Gradient Background */}
 
-      <div className="container mx-auto flex flex-col items-center gap-8 px-4 text-center">
-        <div className="space-y-4 max-w-[980px]">
-          <h1 className="text-4xl font-bold leading-tight tracking-tight md:text-6xl lg:leading-[1.1]">
-            Don't repeat yourself. <br className="hidden md:block" />
-            <span className="text-muted-foreground">
-              Scaffold your next big idea.
-            </span>
-          </h1>
-          <p className="mx-auto max-w-[700px] text-lg text-muted-foreground md:text-xl">
-            A community-driven template registry and CLI tool that handles the
-            clean setup, so you can focus on building the future.
-          </p>
-        </div>
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(226, 232, 240, 0.15), transparent 70%), #000000",
+        }}
+      />
 
-        <div className="flex w-full items-center justify-center space-x-4">
-          <Link
-            href="#templates"
-            className="inline-flex h-11 items-center justify-center rounded-md bg-foreground px-8 text-sm font-medium text-background transition-colors hover:bg-foreground/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-          >
-            Browse Templates
-          </Link>
-          <Link
-            href="#cli"
-            className="inline-flex h-11 items-center justify-center rounded-md border border-input bg-background/50 backdrop-blur-sm px-8 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-          >
-            <FaTerminal className="mr-2 h-4 w-4" />
-            Install CLI
-          </Link>
+      <div className="container relative z-10 mx-auto px-6 max-w-7xl">
+        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
+          {/* Left Content */}
+          <div className="flex flex-col items-start space-y-8 animate-fade-in-up">
+            <div className="flex flex-wrap gap-3">
+              <Badge variant="subtle-outline">Community Templates</Badge>
+              <Badge variant="subtle-fill">Premium One-Time Purchase</Badge>
+            </div>
+
+            <div className="space-y-4">
+              <h1 className="text-[2rem] font-semibold leading-[1.1] tracking-tight text-white md:text-[3.5rem]">
+                Start <span className="text-neutral-100">Faster</span> with{" "}
+                <span className="text-neutral-100">Production-Ready</span>{" "}
+                Templates
+              </h1>
+              <p className="max-w-[48ch] text-lg text-neutral-400">
+                Discover, preview, and download curated GitHub and GitLab
+                templates. Free community starters or premium, one-time purchase
+                templates with lifetime access.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-4">
+              <Link
+                href="#templates"
+                className={cn(
+                  buttonVariants({ variant: "primary", size: "lg" }),
+                  "group"
+                )}
+              >
+                Browse Templates
+                <FaArrowRight className="ml-2 h-4 w-4 icon-slide-right" />
+              </Link>
+              <Link
+                href="#cli"
+                className={cn(
+                  buttonVariants({ variant: "secondary-action", size: "lg" }),
+                  "group"
+                )}
+              >
+                <FaTerminal className="mr-2 h-4 w-4" />
+                Install via CLI
+              </Link>
+            </div>
+
+            <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-neutral-500">
+              <span className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-neutral-600" />
+                No Git History Included
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-neutral-600" />
+                Works with GitHub & GitLab
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-neutral-600" />
+                Choose Your Package Manager
+              </span>
+            </div>
+          </div>
+
+          {/* Right Visual - Dashboard Showcase */}
+          <div className="relative animate-fade-in-up delay-100 perspective-1000 group">
+            <HeroTerminal />
+          </div>
         </div>
       </div>
     </section>

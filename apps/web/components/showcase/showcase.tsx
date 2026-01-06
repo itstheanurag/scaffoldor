@@ -3,7 +3,10 @@ import { StepsShowcase } from "./steps";
 
 export function CliShowcase() {
   return (
-    <section id="cli" className="container mx-auto py-12 md:py-24 lg:py-32">
+    <section
+      id="cli"
+      className="container mx-auto py-12 md:py-24 lg:py-32 max-w-7xl px-4"
+    >
       <div className="grid gap-10 lg:grid-cols-2 lg:gap-24">
         <div className="space-y-4">
           <h2 className="text-3xl font-bold tracking-tight md:text-4xl text-balance">
