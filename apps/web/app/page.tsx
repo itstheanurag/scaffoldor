@@ -1,5 +1,5 @@
 import { Navbar } from "@/components/navbar";
-import { Hero } from "@/components/hero";
+import { Hero } from "@/components/hero/hero";
 import { HowItWorks } from "@/components/how-it-works";
 import { TemplatePreview } from "@/components/template-preview";
 import { Community } from "@/components/community";
