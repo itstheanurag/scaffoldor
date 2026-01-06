@@ -35,4 +35,51 @@ body {
       width: 100%;
     }
   }
+
+  /* Hero Animations */
+  @keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.8s ease-out forwards;
+  }
+  
+  .delay-100 {
+    animation-delay: 100ms;
+  }
+  
+  .delay-200 {
+    animation-delay: 200ms;
+  }
+  
+  @keyframes subtle-glow-pulse {
+    0%, 100% {
+        box-shadow: 0 0 15px -5px rgba(255, 255, 255, 0.1);
+    }
+    50% {
+        box-shadow: 0 0 25px -5px rgba(255, 255, 255, 0.2);
+    }
+  }
+  
+  .animate-glow-pulse {
+      animation: subtle-glow-pulse 4s infinite ease-in-out;
+  }
+
+  /* Icon Slide Animation for Buttons */
+  .group:hover .icon-slide-right {
+      transform: translateX(4px);
+  }
+  
+  .icon-slide-right {
+      transition: transform 0.2s ease;
+  }
+
 }
