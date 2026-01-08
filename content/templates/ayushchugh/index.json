@@ -1,0 +1,107 @@
+{
+  "templates": [
+    {
+      "slug": "roots",
+      "name": "roots template",
+      "url": "https://github.com/ravixstudio/roots-template",
+      "platform": "github",
+      "type": "fullstack",
+      "framework": "nextjs",
+      "description": "Production ready dashboard template for operations team of any startup",
+      "tags": [
+        "nextjs",
+        "typescript",
+        "zustand",
+        "tanstack-query",
+        "bun",
+        "zod",
+        "baseui",
+        "shadcn/ui"
+      ],
+      "features": [
+        "auth",
+        "rbac",
+        "data-tables",
+        "typesafe",
+        "darkmode",
+        "modular-architecture"
+      ],
+      "author": {
+        "name": "Ayush Chugh",
+        "github": "ravixstudio"
+      },
+      "tier": "free",
+      "license": "MIT"
+    },
+    {
+      "slug": "webapp",
+      "name": "webapp template",
+      "url": "https://github.com/ravixstudio/webapp-template",
+      "platform": "github",
+      "type": "fullstack",
+      "framework": "nextjs",
+      "description": "Production ready NextJS + Shadcn template",
+      "tags": [
+        "nextjs",
+        "typescript",
+        "zustand",
+        "tanstack-query",
+        "bun",
+        "zod",
+        "baseui",
+        "shadcn/ui"
+      ],
+      "features": [
+        "auth",
+        "rbac",
+        "data-tables",
+        "typesafe",
+        "darkmode",
+        "modular-architecture"
+      ],
+      "author": {
+        "name": "Ayush Chugh",
+        "github": "ravixstudio"
+      },
+      "tier": "free",
+      "license": "MIT"
+    },
+    {
+      "slug": "backend",
+      "name": "backend template",
+      "url": "https://github.com/ravixstudio/backend-template",
+      "platform": "github",
+      "type": "backend",
+      "framework": "hono",
+      "description": "Production-ready Bun + Hono + TypeScript monorepo template with PostgreSQL, Drizzle ORM, OAuth authentication, and shared packages for scalable backend services.",
+      "tags": [
+        "hono",
+        "bun",
+        "drizzle",
+        "postgresql",
+        "bun",
+        "oauth",
+        "prometheus",
+        "grafana",
+        "zod",
+        "typescript",
+        "openai/scalar"
+      ],
+      "features": [
+        "auth",
+        "modular-architecture",
+        "typesafe",
+        "database",
+        "monitoring",
+        "logging",
+        "oauth"
+      ],
+      "author": {
+        "name": "Ayush Chugh",
+        "github": "ravixstudio"
+      },
+      "tier": "free",
+      "license": "MIT"
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 {
   "version": "1.0.0",
-  "lastUpdated": "2026-01-08T11:12:53.118Z",
+  "lastUpdated": "2026-01-08T14:00:32.180Z",
   "templates": {
-    "ayushchug": [
+    "ayushchugh": [
       {
         "slug": "backend",
         "name": "backend template",
@@ -34,7 +34,7 @@
           "oauth"
         ],
         "author": {
-          "name": "Ayush Chug",
+          "name": "Ayush Chugh",
           "github": "ravixstudio"
         },
         "tier": "free",
@@ -67,7 +67,7 @@
           "modular-architecture"
         ],
         "author": {
-          "name": "Ayush Chug",
+          "name": "Ayush Chugh",
           "github": "ravixstudio"
         },
         "tier": "free",
@@ -100,7 +100,7 @@
           "modular-architecture"
         ],
         "author": {
-          "name": "Ayush Chug",
+          "name": "Ayush Chugh",
           "github": "ravixstudio"
         },
         "tier": "free",
