@@ -75,15 +75,6 @@ export const AuthorSchema = z.object({
 });
 
 /**
- * Template statistics (populated by registry maintainers or automation)
- */
-export const StatsSchema = z.object({
-  stars: z.number().int().nonnegative().default(0),
-  downloads: z.number().int().nonnegative().default(0),
-  lastUpdated: z.string().datetime().optional(),
-});
-
-/**
  * Community template schema with all fields
  * This is the source of truth for template structure
  */
@@ -121,9 +112,6 @@ export const CommunityTemplateSchema = z.object({
   /** Template author */
   author: AuthorSchema,
 
-  /** Usage statistics */
-  stats: StatsSchema.default({ stars: 0, downloads: 0 }),
-
   /** Pricing tier */
   tier: TemplateTierSchema.default("free"),
 
@@ -135,11 +123,19 @@ export const CommunityTemplateSchema = z.object({
 });
 
 /**
- * Full registry schema
+ * Full registry schema - templates grouped by author
+ * Structure: { templates: { "username": [...templates] } }
  */
 export const RegistrySchema = z.object({
   version: z.string().default("1.0.0"),
   lastUpdated: z.string().datetime(),
+  templates: z.record(z.string(), z.array(CommunityTemplateSchema)),
+});
+
+/**
+ * User templates file schema (content/templates/{user}/index.json)
+ */
+export const UserTemplatesSchema = z.object({
   templates: z.array(CommunityTemplateSchema),
 });
 
@@ -149,6 +145,6 @@ export type TemplateType = z.infer<typeof TemplateTypeSchema>;
 export type Framework = z.infer<typeof FrameworkSchema>;
 export type Pricing = z.infer<typeof PricingSchema>;
 export type Author = z.infer<typeof AuthorSchema>;
-export type Stats = z.infer<typeof StatsSchema>;
 export type CommunityTemplate = z.infer<typeof CommunityTemplateSchema>;
 export type Registry = z.infer<typeof RegistrySchema>;
+export type UserTemplates = z.infer<typeof UserTemplatesSchema>;
