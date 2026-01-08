@@ -8,6 +8,7 @@ import {
   FaCheck,
   FaCopy,
 } from "react-icons/fa";
+import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import { motion } from "motion/react";
 
@@ -32,7 +33,7 @@ export function TemplateCard({ template }: TemplateCardProps) {
       animate={{ opacity: 1, y: 0 }}
       className="group relative flex flex-col justify-between overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900/50 p-6 transition-all hover:border-neutral-700 hover:bg-neutral-900 shadow-lg hover:shadow-xl"
     >
-      <div className="space-y-4">
+      <div className="space-y-2">
         {/* Header */}
         <div className="flex items-start justify-between">
           <div>
@@ -67,53 +68,57 @@ export function TemplateCard({ template }: TemplateCardProps) {
         </div>
 
         {/* Description */}
-        <p className="text-sm text-neutral-400 min-h-[40px]">
+        <p className="text-[14px] text-neutral-400">
           {template.description || "No description provided."}
         </p>
 
         {/* Features */}
         {template.features && template.features.length > 0 && (
           <div className="space-y-1.5">
-            <h4 className="text-[10px] font-bold uppercase text-neutral-600 tracking-wider">
+            <h4 className="text-[12px] font-bold uppercase text-neutral-600 tracking-wider">
               Features
             </h4>
             <ul className="grid grid-cols-2 gap-1">
-              {template.features.slice(0, 4).map((feature, i) => (
+              {template.features.map((feature, i) => (
                 <li
                   key={i}
-                  className="text-xs text-neutral-500 flex items-center gap-1.5 truncate"
+                  className="text-[12px] text-neutral-500 flex items-center gap-1.5 truncate capitalize"
                 >
                   <div className="w-1 h-1 rounded-full bg-emerald-500/50" />
                   {feature}
                 </li>
               ))}
-              {template.features.length > 4 && (
-                <li className="text-xs text-neutral-600 italic pl-2.5">
-                  +{template.features.length - 4} more
-                </li>
-              )}
             </ul>
           </div>
         )}
 
         {/* Badges */}
-        <div className="flex flex-wrap gap-2 pt-2">
-          {template.framework !== "other" && template.framework !== "none" && (
-            <span className="inline-flex items-center rounded-md bg-emerald-500/10 px-2 py-1 text-xs font-medium text-emerald-400 border border-emerald-500/20">
-              {template.framework}
-            </span>
-          )}
-          <span className="inline-flex items-center rounded-md bg-blue-500/10 px-2 py-1 text-xs font-medium text-blue-400 border border-blue-500/20">
-            {template.type}
-          </span>
-          {template.tags.slice(0, 3).map((tag) => (
-            <span
-              key={tag}
-              className="inline-flex items-center rounded-md bg-neutral-800 px-2 py-1 text-xs text-neutral-400 border border-neutral-700"
-            >
-              {tag}
-            </span>
-          ))}
+        <div className="pt-2">
+          <h4 className="mb-2 text-[12px] font-bold uppercase tracking-wider text-neutral-600">
+            Tags
+          </h4>
+
+          <div className="flex flex-wrap gap-2">
+            {template.framework !== "other" &&
+              template.framework !== "none" && (
+                <Badge className="rounded-md text-[14px] bg-emerald-500/10 px-2 py-1 text-emerald-400 hover:bg-emerald-500/20">
+                  {template.framework}
+                </Badge>
+              )}
+
+            <Badge className="rounded-md text-[14px] bg-blue-500/10 px-2 py-1 text-blue-400 hover:bg-blue-500/20">
+              {template.type}
+            </Badge>
+
+            {template.tags.map((tag: string, index: number) => (
+              <Badge
+                key={`${index}-${tag}`}
+                className="rounded-md text-[14px] bg-neutral-800 px-2 py-1 text-neutral-400 hover:bg-neutral-700 hover:text-neutral-300"
+              >
+                {tag}
+              </Badge>
+            ))}
+          </div>
         </div>
       </div>
 

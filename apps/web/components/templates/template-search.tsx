@@ -1,10 +1,10 @@
 "use client";
-
 import { CommunityTemplateWithUsername } from "@/lib/registry";
 import { useState, useMemo } from "react";
 import { TemplateCard } from "./template-card";
-import { FaSearch, FaFilter } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
 import { motion, AnimatePresence } from "motion/react";
+import { Dropdown } from "../ui/dropdown";
 
 interface TemplateSearchProps {
   initialTemplates: CommunityTemplateWithUsername[];
@@ -18,12 +18,12 @@ export function TemplateSearch({ initialTemplates }: TemplateSearchProps) {
   // Extract unique options
   const frameworks = useMemo(() => {
     const s = new Set(initialTemplates.map((t) => t.framework));
-    return ["all", ...Array.from(s)].filter((f) => f !== "none");
+    return Array.from(s).filter((f) => f !== "none");
   }, [initialTemplates]);
 
   const types = useMemo(() => {
     const s = new Set(initialTemplates.map((t) => t.type));
-    return ["all", ...Array.from(s)];
+    return Array.from(s);
   }, [initialTemplates]);
 
   const filteredTemplates = useMemo(() => {
@@ -49,57 +49,38 @@ export function TemplateSearch({ initialTemplates }: TemplateSearchProps) {
   return (
     <div className="space-y-8">
       {/* Search and Filters */}
-      <div className="flex flex-col md:flex-row gap-4 p-1">
-        <div className="relative flex-1 group">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <FaSearch className="text-neutral-500 group-focus-within:text-emerald-500 transition-colors" />
+      <div className="sticky top-20 z-40 -mx-1 px-1 py-4 bg-black/80 backdrop-blur-xl border-b border-neutral-800/50">
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="relative flex-1 group">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <FaSearch className="text-neutral-500 group-focus-within:text-emerald-500 transition-colors" />
+            </div>
+            <input
+              type="text"
+              placeholder="Search templates, authors, frameworks..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="block w-full pl-10 pr-3 py-2.5 border border-neutral-800 rounded-xl leading-5 bg-neutral-900/50 text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 transition-all"
+            />
           </div>
-          <input
-            type="text"
-            placeholder="Search templates, authors, frameworks..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="block w-full pl-10 pr-3 py-2.5 border border-neutral-800 rounded-xl leading-5 bg-neutral-900/50 text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 transition-all"
-          />
-        </div>
 
-        <div className="flex gap-4">
-          <div className="relative min-w-[140px]">
-            <select
+          <div className="flex gap-4">
+            <Dropdown
+              label="All Types"
               value={selectedType}
-              onChange={(e) => setSelectedType(e.target.value)}
-              className="appearance-none block w-full pl-3 pr-10 py-2.5 border border-neutral-800 rounded-xl bg-neutral-900/50 text-neutral-300 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 transition-all cursor-pointer"
-            >
-              <option value="all">All Types</option>
-              {types.map((type) => (
-                <option key={type} value={type}>
-                  {type.charAt(0).toUpperCase() + type.slice(1)}
-                </option>
-              ))}
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-neutral-500">
-              <FaFilter size={12} />
-            </div>
-          </div>
+              options={types}
+              onChange={setSelectedType}
+            />
 
-          <div className="relative min-w-[140px]">
-            <select
+            <Dropdown
+              label="All Frameworks"
               value={selectedFramework}
-              onChange={(e) => setSelectedFramework(e.target.value)}
-              className="appearance-none block w-full pl-3 pr-10 py-2.5 border border-neutral-800 rounded-xl bg-neutral-900/50 text-neutral-300 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 transition-all cursor-pointer"
-            >
-              <option value="all">All Frameworks</option>
-              {frameworks.map((fw) => (
-                <option key={fw} value={fw}>
-                  {fw === "other"
-                    ? "Other"
-                    : fw.charAt(0).toUpperCase() + fw.slice(1)}
-                </option>
-              ))}
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-neutral-500">
-              <FaFilter size={12} />
-            </div>
+              options={frameworks}
+              onChange={setSelectedFramework}
+              formatOption={(f) =>
+                f === "other" ? "Other" : f.charAt(0).toUpperCase() + f.slice(1)
+              }
+            />
           </div>
         </div>
       </div>

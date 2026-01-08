@@ -9,10 +9,10 @@ export default function TemplatesPage() {
   return (
     <div className="flex min-h-screen flex-col bg-black">
       <Navbar />
-      <main className="flex-1 w-full pt-36">
+      <main className="flex-1 w-full pt-26">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Header */}
-          <div className="mb-12">
+          <div className="mb-4">
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-neutral-300 dark:text-neutral-200 mb-4">
               Explore Templates
             </h1>
