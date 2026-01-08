@@ -1,11 +1,10 @@
-import pc from "picocolors";
 import {
   searchTemplates,
   getAllTemplates,
   getAuthorTemplates,
 } from "../registry";
 import { UI } from "../helpers/ui";
-import { CommunityTemplate } from "@repo/schema";
+import { TemplateWithUsername } from "../types";
 
 export interface ListOptions {
   remote?: boolean;
@@ -15,7 +14,7 @@ export interface ListOptions {
 }
 
 export async function listCommand(options: ListOptions) {
-  let templates: CommunityTemplate[];
+  let templates: TemplateWithUsername[];
 
   if (options.remote) {
     UI.info("Fetching from remote registry...");
