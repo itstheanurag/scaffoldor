@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { HeroDashboard } from "@/components/hero/dashboard";
+import { CONTENT_LINKS } from "@/lib/link";
 
 export function Hero() {
   return (
@@ -81,7 +82,8 @@ export function Hero() {
               <FaArrowRight className="ml-2 h-4 w-4 icon-slide-right" />
             </Link>
             <Link
-              href="#cli"
+              href={CONTENT_LINKS.CLI_INSTALL}
+              target="_blank"
               className={cn(
                 buttonVariants({ variant: "secondary-action", size: "lg" }),
                 "group"
