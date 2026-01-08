@@ -1,5 +1,7 @@
 "use client";
 
+import { CONTENT_LINKS } from "@/lib/link";
+import { navVariants } from "@/variants/nav";
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -7,20 +9,21 @@ import { BiMenu, BiX } from "react-icons/bi";
 import { BsStar } from "react-icons/bs";
 import { FaCube } from "react-icons/fa6";
 
-const navVariants = {
-  top: {
-    y: 0,
-    backgroundColor: "rgba(0,0,0,0)",
-    borderColor: "rgba(0,0,0,0)",
-    boxShadow: "0 0 0 rgba(0,0,0,0)",
+interface NavItem {
+  label: string;
+  url: string;
+}
+
+const navItems: NavItem[] = [
+  {
+    label: "Templates",
+    url: "/templates",
   },
-  scrolled: {
-    y: 2,
-    backgroundColor: "rgba(10,10,10,0.85)",
-    borderColor: "rgba(38,38,38,1)",
-    boxShadow: "0 10px 30px rgba(0,0,0,0.4)",
+  {
+    label: "CLI",
+    url: CONTENT_LINKS.CLI_INSTALL,
   },
-};
+];
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -61,14 +64,16 @@ export function Navbar() {
             </Link>
 
             <div className="hidden md:flex items-center gap-6">
-              {["Templates", "CLI"].map((item) => (
+              {navItems.map((item: NavItem) => (
                 <Link
-                  key={item}
-                  href={`#${item.toLowerCase()}`}
+                  key={item.label}
+                  href={item.url}
+                  target={item.url.startsWith("/") ? "_self" : "_blank"}
+                  rel={item.url.startsWith("/") ? "" : "noopener noreferrer"}
                   className="text-sm font-medium text-neutral-400 hover:text-neutral-200 transition-colors"
                   scroll={false}
                 >
-                  {item}
+                  {item.label}
                 </Link>
               ))}
             </div>
@@ -78,7 +83,7 @@ export function Navbar() {
           <div className="hidden md:flex items-center gap-4">
             <div className="h-4 w-px bg-neutral-800" />
             <a
-              href="https://github.com/itstheanurag/scaffoldor"
+              href={CONTENT_LINKS.GITHUB}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-900 border border-neutral-800 text-sm font-medium text-white hover:bg-neutral-800 transition-colors"
@@ -109,21 +114,23 @@ export function Navbar() {
             className="fixed inset-x-4 top-24 z-40 rounded-xl border border-neutral-800 bg-neutral-950/95 p-6 shadow-2xl backdrop-blur-md md:hidden pointer-events-auto"
           >
             <div className="flex flex-col gap-4">
-              {["Templates", "CLI"].map((item) => (
+              {navItems.map((item: NavItem) => (
                 <Link
-                  key={item}
-                  href={`#${item.toLowerCase()}`}
+                  key={item.label}
+                  href={item.url}
+                  target={item.url.startsWith("/") ? "_self" : "_blank"}
+                  rel={item.url.startsWith("/") ? "" : "noopener noreferrer"}
                   className="text-lg font-medium text-neutral-300 hover:text-white transition-colors"
-                  onClick={() => setMobileMenuOpen(false)}
+                  scroll={false}
                 >
-                  {item}
+                  {item.label}
                 </Link>
               ))}
 
               <div className="h-px bg-neutral-900 my-2" />
 
               <a
-                href="https://github.com/itstheanurag/scaffoldor"
+                href={CONTENT_LINKS.GITHUB}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 py-3 rounded-lg bg-neutral-900 border border-neutral-800 text-sm font-medium text-white"

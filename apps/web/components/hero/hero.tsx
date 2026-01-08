@@ -71,7 +71,7 @@ export function Hero() {
 
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Link
-              href="#templates"
+              href="/templates"
               className={cn(
                 buttonVariants({ variant: "primary", size: "lg" }),
                 "group"
