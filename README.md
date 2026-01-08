@@ -123,13 +123,13 @@ Available Templates:
 
 This is a monorepo containing:
 
-| Package | Description |
-|---------|-------------|
-| `apps/cli` | The scaffoldor CLI tool |
-| `apps/web` | Web application for template directory |
-| `packages/ui` | Shared React components |
-| `packages/eslint-config` | Shared ESLint configuration |
-| `packages/typescript-config` | Shared TypeScript configuration |
+| Package                      | Description                            |
+| ---------------------------- | -------------------------------------- |
+| `apps/cli`                   | The scaffoldor CLI tool                |
+| `apps/web`                   | Web application for template directory |
+| `packages/ui`                | Shared React components                |
+| `packages/eslint-config`     | Shared ESLint configuration            |
+| `packages/typescript-config` | Shared TypeScript configuration        |
 
 ## Contributing
 

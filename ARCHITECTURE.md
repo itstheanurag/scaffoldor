@@ -19,7 +19,7 @@ Scaffoldor is a template management system consisting of:
 2. **Web Directory**: A web application serving as a searchable directory for popular templates
 3. **Shared Infrastructure**: Common configurations and components used across packages
 
-```
+```mermaid
 ┌─────────────────────────────────────────────────────────────┐
 │                      Scaffoldor                             │
 ├─────────────────────────────────────────────────────────────┤
@@ -36,14 +36,15 @@ Scaffoldor is a template management system consisting of:
 
 The project uses [Turborepo](https://turbo.build/repo) for monorepo management with [Bun](https://bun.sh/) as the package manager.
 
-```
+```text
 scaffoldor/
 ├── apps/
 │   ├── cli/                    # CLI application
 │   │   ├── src/
-│   │   │   ├── index.ts        # Entry point & command definitions
+│   │   │   ├── commands/       # Command implementations (add, list, etc.)
+│   │   │   ├── helpers/        # UI and logic helpers
+│   │   │   ├── index.ts        # Entry point
 │   │   │   ├── registry.ts     # Registry management
-│   │   │   ├── types.ts        # TypeScript types & Zod schemas
 │   │   │   └── utils.ts        # Utility functions
 │   │   └── package.json
 │   │
@@ -51,10 +52,17 @@ scaffoldor/
 │       ├── app/                # Next.js App Router
 │       └── package.json
 │
+├── content/                    # Template definitions (registry source)
+│   └── templates/              # JSON files by username
+│
 ├── packages/
 │   ├── eslint-config/          # Shared ESLint rules
+│   ├── schema/                 # Shared Zod schemas & types
 │   ├── typescript-config/      # Shared tsconfig
 │   └── ui/                     # Shared React components
+│
+├── registry/                   # Compiled registry output
+│   └── registry.json
 │
 ├── turbo.json                  # Turborepo pipeline config
 └── package.json                # Root workspace config
@@ -75,22 +83,22 @@ The CLI is built with Node.js and published as the `scaffoldor` npm package.
 
 ### Technology Stack
 
-| Component | Technology |
-|-----------|------------|
-| Command parsing | [Commander.js](https://github.com/tj/commander.js) |
-| User prompts | [Inquirer.js](https://github.com/SBoudrias/Inquirer.js) |
-| Git operations | [simple-git](https://github.com/steveukx/git-js) |
-| File operations | [fs-extra](https://github.com/jprichardson/node-fs-extra) |
-| Schema validation | [Zod](https://github.com/colinhacks/zod) |
-| Console styling | [picocolors](https://github.com/alexeyraspopov/picocolors) |
-| Build tool | [tsup](https://github.com/egoist/tsup) |
+| Component         | Technology                                                 |
+| ----------------- | ---------------------------------------------------------- |
+| Command parsing   | [Commander.js](https://github.com/tj/commander.js)         |
+| User prompts      | [Inquirer.js](https://github.com/SBoudrias/Inquirer.js)    |
+| Git operations    | [simple-git](https://github.com/steveukx/git-js)           |
+| File operations   | [fs-extra](https://github.com/jprichardson/node-fs-extra)  |
+| Schema validation | [Zod](https://github.com/colinhacks/zod)                   |
+| Console styling   | [picocolors](https://github.com/alexeyraspopov/picocolors) |
+| Build tool        | [tsup](https://github.com/egoist/tsup)                     |
 
 ### Command Structure
 
-```
+```text
 scaffoldor
 ├── list                    # List all templates in registry
-├── add <slug> <url>        # Add template to registry
+├── add <slug> <url>        # Add template to local registry
 │   ├── --type <type>       # Template type (frontend, backend, etc.)
 │   └── --description       # Template description
 └── @<slug> [destination]   # Clone template to destination
@@ -100,50 +108,63 @@ scaffoldor
 
 #### `index.ts` - Entry Point
 
-- Defines CLI commands using Commander.js
-- Handles command routing
-- Provides the `@slug` shorthand syntax for quick scaffolding
+- Bootstraps the CLI using Commander.js
+- Registers commands from `src/commands/`
+- Handles global options and versioning
+
+#### `src/commands/` - Command Implementations
+
+- **`list.ts`**: Lists available templates with filtering
+- **`search.ts`**: Fuzzy search for templates
+- **`scaffold.ts`**: Core logic for cloning and setting up templates
+- **`add.ts`**: Interactive wizard to add new templates to local registry
+- **`sync.ts`**: Syncs local registry with remote
 
 #### `registry.ts` - Registry Management
 
-- Reads/writes the local `registry.json` file
-- CRUD operations for templates
-- Uses Zod for schema validation
+- Reads from the centralized `registry.json`
+- Provides search and filtering capabilities
+- Validates data against `@repo/schema`
 
-```typescript
-// Registry structure
-{
-  "templates": [
-    {
-      "slug": "nextjs-basic",
-      "type": "frontend",
-      "url": "https://github.com/user/template",
-      "description": "Basic Next.js starter",
-      "features": [],
-      "tags": [],
-      "author": "",
-      "license": "MIT"
-    }
-  ]
-}
-```
+#### `helpers/ui.ts` - UI Helpers
 
-#### `types.ts` - Type Definitions
+- Consistent styling for headers, alerts, and tables
+- Centralized error handling and messaging
 
-- Zod schemas for runtime validation
-- TypeScript types derived from schemas
-- Ensures type safety across the application
+#### `@repo/schema` - Shared Types
 
-#### `utils.ts` - Utilities
+- **`CommunityTemplateSchema`**: Validation for template data
+- **`RegistrySchema`**: Validation for the entire registry
+- Ensures consistency between CLI and Web App
 
-- **cloneTemplate**: Clones git repositories and removes `.git` directory
-- **detectPackageManager**: Identifies npm/pnpm/yarn/bun from lockfiles
-- **handlePackageManagerTransition**: Prompts user for package manager preference
-- **initNewGitRepo**: Initializes fresh git repository
+### Command Internals
+
+#### Registry Synchronization (`sync`)
+
+The `sync` command is designed to minimize latency and provide offline support. It fetches the latest compiled `registry.json` from the remote source and saves it to a local cache.
+
+- **Local Priority**: Once synced, commands like `list` and `scaffold` use this local copy, making operations nearly instantaneous.
+- **Offline Mode**: If the remote registry is unreachable, the CLI gracefully falls back to the last successfully cached local data.
+
+#### Adding Templates (`add`)
+
+The `add` command allows users to register templates specifically in their local registry.
+
+- **Local-First Development**: Authors can test their template definitions locally before submitting them to the community registry.
+- **Private Templates**: Useful for internal or private templates that shouldn't be shared globally.
+- **Validation**: Every added template is validated against the `@repo/schema` before being written to disk.
+
+#### Smart Searching (`search` / `list`)
+
+Scanning the registry is optimized by combining sources:
+
+1. **Local Search**: Scans the locally added and cached templates.
+2. **Remote Fallback**: If a template isn't found locally, or if the `--remote` flag is used, the CLI fetches the global registry in real-time.
+3. **Merging**: Results are merged with local definitions taking precedence over remote ones if slugs collide.
 
 ### CLI Flow Diagram
 
-```
+```text
 ┌──────────────────────────────────────────────────────────────┐
 │                    User runs: scaffoldor @nextjs             │
 └──────────────────────────────────────────────────────────────┘
@@ -183,13 +204,13 @@ scaffoldor
 
 The web app is built with [Next.js](https://nextjs.org/) using the App Router.
 
-### Technology Stack
+### Web Tech Stack
 
-| Component | Technology |
-|-----------|------------|
-| Framework | Next.js 16 |
-| Styling | Tailwind CSS 4 |
-| Runtime | React 19 |
+| Component | Technology     |
+| --------- | -------------- |
+| Framework | Next.js 16     |
+| Styling   | Tailwind CSS 4 |
+| Runtime   | React 19       |
 
 ### Purpose
 
@@ -201,7 +222,7 @@ The web application serves as:
 
 ### Structure
 
-```
+```text
 apps/web/
 ├── app/
 │   ├── layout.tsx      # Root layout
@@ -228,6 +249,14 @@ Base TypeScript configurations:
 - Common compiler options
 - Path aliases
 
+### `@repo/schema`
+
+Shared data validation source:
+
+- **Zod Schemas**: Runtime validation for templates and registry
+- **TypeScript Types**: Inferred static types
+- **Single Source of Truth**: Used by CLI (input/output) and Web (display)
+
 ### `@repo/ui`
 
 Shared React component library:
@@ -240,19 +269,28 @@ Shared React component library:
 
 ### Template Registry
 
-Currently uses a local `registry.json` file:
+The registry is built from the source of truth in `content/templates`:
 
-```
-┌─────────────┐     read/write      ┌──────────────────┐
-│   CLI       │ ◄─────────────────► │  registry.json   │
-└─────────────┘                     └──────────────────┘
+```mermaid
+┌──────────────────────┐      Build Script      ┌──────────────────┐
+│  content/templates/  │ ─────────────────────► │  registry.json   │
+│  (Source of Truth)   │   (scripts/build.ts)   │ (Compiled Data)  │
+└──────────────────────┘                        └────────┬─────────┘
+                                                         │
+                                        ┌────────────────┴────────────────┐
+                                        │                                 │
+                                        ▼                                 ▼
+                                 ┌─────────────┐                   ┌─────────────┐
+                                 │     CLI     │                   │   Web App   │
+                                 │ (Read-Only) │                   │ (Read-Only) │
+                                 └─────────────┘                   └─────────────┘
 ```
 
 ### Future: Centralized Registry
 
 Planned architecture with web-hosted registry:
 
-```
+```mermaid
 ┌─────────────┐                     ┌──────────────────┐
 │   CLI       │ ◄──── fetch ─────── │   Web API        │
 └─────────────┘                     └────────┬─────────┘
@@ -271,22 +309,22 @@ Planned architecture with web-hosted registry:
 ### Build Pipeline
 
 ```bash
-# Full build
+#### Full build
 turbo build
 
-# Development (all apps)
+#### Development (all apps)
 turbo dev
 
-# Type checking
+#### Type checking
 turbo check-types
 
-# Linting
+#### Linting
 turbo lint
 ```
 
 ### Package Dependency Graph
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                         apps/cli                            │
 │                    (no internal deps)                       │

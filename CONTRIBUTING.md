@@ -1,17 +1,23 @@
 # Contributing to Scaffoldor
 
-Thank you for your interest in contributing to Scaffoldor! This document provides guidelines and instructions for contributing to the project.
+Thank you for your interest in contributing to Scaffoldor! We have two main ways to contribute:
+
+1. **[Submit a Template](./content/templates/CONTRIBUTING.md)**: Add your starter kit to the public registry.
+2. **Improve the Platform**: Contribute code to the CLI, Web App, or Packages.
 
 ## Table of Contents
 
-- [Getting Started](#getting-started)
-- [Project Structure](#project-structure)
-- [Development Workflow](#development-workflow)
-- [Submitting Changes](#submitting-changes)
+- [Contributing Templates](./content/templates/CONTRIBUTING.md)
+- [Contributing to the Codebase](#contributing-to-the-codebase)
+  - [Getting Started](#getting-started)
+  - [Project Structure](#project-structure)
+  - [Development Workflow](#development-workflow)
+  - [Submitting Changes](#submitting-changes)
 - [Code Style](#code-style)
-- [Commit Messages](#commit-messages)
 
-## Getting Started
+## Contributing to the Codebase
+
+### Getting Started
 
 ### Prerequisites
 
@@ -24,22 +30,26 @@ Thank you for your interest in contributing to Scaffoldor! This document provide
 1. **Fork the repository** on GitHub/GitLab
 
 2. **Clone your fork**
+
    ```bash
    git clone https://github.com/YOUR_USERNAME/scaffoldor.git
    cd scaffoldor
    ```
 
 3. **Install dependencies**
+
    ```bash
    bun install
    ```
 
 4. **Build all packages**
+
    ```bash
    bun run build
    ```
 
 5. **Start development mode**
+
    ```bash
    bun run dev
    ```
@@ -82,6 +92,7 @@ node ./dist/index.js list
 ```
 
 To test the CLI globally during development:
+
 ```bash
 cd apps/cli
 bun link
@@ -102,6 +113,7 @@ The web app will be available at `http://localhost:3000`.
 ### Running Everything Together
 
 From the root directory:
+
 ```bash
 # Run all apps in development mode
 bun run dev
@@ -131,6 +143,7 @@ Before starting work on a significant change:
 ### Pull Request Process
 
 1. **Create a feature branch**
+
    ```bash
    git checkout -b feature/your-feature-name
    ```
@@ -142,6 +155,7 @@ Before starting work on a significant change:
 4. **Commit your changes** using conventional commit messages
 
 5. **Push to your fork**
+
    ```bash
    git push origin feature/your-feature-name
    ```

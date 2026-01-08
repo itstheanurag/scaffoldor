@@ -7,10 +7,16 @@ const LOCAL_REGISTRY_PATH = path.join(process.cwd(), "registry.json");
 /**
  * Remote registry URL - can be overridden via environment variable
  */
-
 const REMOTE_REGISTRY_URL =
   process.env.SCAFFOLDOR_REGISTRY_URL ||
   "https://raw.githubusercontent.com/itstheanurag/scaffoldor/main/registry/registry.json";
+
+/**
+ * Helper to flatten templates from author-grouped structure to array
+ */
+export function flattenTemplates(registry: Registry): CommunityTemplate[] {
+  return Object.values(registry.templates).flat();
+}
 
 /**
  * Read the local registry file
@@ -20,7 +26,7 @@ export async function readLocalRegistry(): Promise<Registry> {
     return {
       version: "1.0.0",
       lastUpdated: new Date().toISOString(),
-      templates: [],
+      templates: {},
     };
   }
 
@@ -68,28 +74,84 @@ export async function readRegistry(): Promise<Registry> {
 }
 
 /**
- * Find a template by slug
+ * Get all templates as flat array from registry
+ */
+export async function getAllTemplates(): Promise<CommunityTemplate[]> {
+  const registry = await readLocalRegistry();
+  return flattenTemplates(registry);
+}
+
+/**
+ * Find a template by slug (@author/template or just template)
  * Searches local first, then remote registry
  */
 export async function findTemplateBySlug(
-  slug: string
+  slug: string,
 ): Promise<CommunityTemplate | undefined> {
+  // Handle @author/template format
+  const normalizedSlug = slug.startsWith("@") ? slug.slice(1) : slug;
+  const hasAuthor = normalizedSlug.includes("/");
+
   // 1. Check local registry first
   const local = await readLocalRegistry();
-  const localTemplate = local.templates.find(
-    (t: CommunityTemplate) => t.slug === slug
-  );
-  if (localTemplate) {
-    return localTemplate;
+
+  if (hasAuthor) {
+    const parts = normalizedSlug.split("/");
+    const author = parts[0];
+    const templateSlug = parts[1];
+    if (author && templateSlug) {
+      const localTemplate = local.templates[author]?.find(
+        (t: CommunityTemplate) => t.slug === templateSlug,
+      );
+      if (localTemplate) return localTemplate;
+    }
+  } else {
+    // Search all authors for the slug
+    const localTemplate = flattenTemplates(local).find(
+      (t: CommunityTemplate) => t.slug === normalizedSlug,
+    );
+    if (localTemplate) return localTemplate;
   }
 
   // 2. Fallback to remote registry
   const remote = await fetchRemoteRegistry();
   if (remote) {
-    return remote.templates.find((t: CommunityTemplate) => t.slug === slug);
+    if (hasAuthor) {
+      const parts = normalizedSlug.split("/");
+      const author = parts[0];
+      const templateSlug = parts[1];
+      if (author && templateSlug) {
+        return remote.templates[author]?.find(
+          (t: CommunityTemplate) => t.slug === templateSlug,
+        );
+      }
+    } else {
+      return flattenTemplates(remote).find(
+        (t: CommunityTemplate) => t.slug === normalizedSlug,
+      );
+    }
   }
 
   return undefined;
+}
+/**
+ * Get all templates for a specific author
+ */
+export async function getAuthorTemplates(
+  author: string,
+): Promise<CommunityTemplate[]> {
+  const local = await readLocalRegistry();
+  const normalizedAuthor = author.startsWith("@") ? author.slice(1) : author;
+  return local.templates[normalizedAuthor] || [];
+}
+
+/**
+ * Check if an author exists in the local registry
+ */
+export async function authorExists(author: string): Promise<boolean> {
+  const local = await readLocalRegistry();
+  const normalizedAuthor = author.startsWith("@") ? author.slice(1) : author;
+  return !!local.templates[normalizedAuthor];
 }
 
 /**
@@ -104,15 +166,14 @@ export async function searchTemplates(options?: {
   const local = await readLocalRegistry();
   const remote = await fetchRemoteRegistry();
 
+  const localTemplates = flattenTemplates(local);
+  const remoteTemplates = remote ? flattenTemplates(remote) : [];
+
   // Combine templates (local takes priority for duplicates)
-  const slugSet = new Set(
-    local.templates.map((t: CommunityTemplate) => t.slug)
-  );
+  const slugSet = new Set(localTemplates.map((t: CommunityTemplate) => t.slug));
   const allTemplates = [
-    ...local.templates,
-    ...(remote?.templates.filter(
-      (t: CommunityTemplate) => !slugSet.has(t.slug)
-    ) || []),
+    ...localTemplates,
+    ...remoteTemplates.filter((t: CommunityTemplate) => !slugSet.has(t.slug)),
   ];
 
   // Apply filters
@@ -138,20 +199,26 @@ export async function searchTemplates(options?: {
 }
 
 /**
- * Add a template to the local registry
+ * Add a template to the local registry under "local" author
  */
 export async function addTemplateToRegistry(
-  template: CommunityTemplate
+  template: CommunityTemplate,
 ): Promise<void> {
   const registry = await readLocalRegistry();
-  const existingIndex = registry.templates.findIndex(
-    (t: CommunityTemplate) => t.slug === template.slug
+  const author = template.author.github || "local";
+
+  if (!registry.templates[author]) {
+    registry.templates[author] = [];
+  }
+
+  const existingIndex = registry.templates[author].findIndex(
+    (t: CommunityTemplate) => t.slug === template.slug,
   );
 
   if (existingIndex !== -1) {
-    registry.templates[existingIndex] = template;
+    registry.templates[author][existingIndex] = template;
   } else {
-    registry.templates.push(template);
+    registry.templates[author].push(template);
   }
 
   registry.lastUpdated = new Date().toISOString();

@@ -18,7 +18,7 @@ export async function cloneTemplate(url: string, dest: string) {
 }
 
 export async function detectPackageManager(
-  dir: string
+  dir: string,
 ): Promise<"npm" | "pnpm" | "yarn" | "bun" | "unknown"> {
   if (await fs.pathExists(path.join(dir, "package-lock.json"))) return "npm";
   if (await fs.pathExists(path.join(dir, "pnpm-lock.yaml"))) return "pnpm";
@@ -62,4 +62,20 @@ export async function initNewGitRepo(dir: string) {
   const newGit = simpleGit(dir);
   await newGit.init();
   console.log(pc.green("Initialized new git repository."));
+}
+
+export async function updatePackageJson(dir: string, name: string) {
+  const pkgPath = path.join(dir, "package.json");
+  if (await fs.pathExists(pkgPath)) {
+    try {
+      const pkg = await fs.readJson(pkgPath);
+      pkg.name = name;
+      await fs.writeJson(pkgPath, pkg, { spaces: 2 });
+      console.log(pc.green(`Updated package.json name to "${name}".`));
+    } catch (error) {
+      console.warn(
+        pc.yellow("Failed to update package.json name. Skipping..."),
+      );
+    }
+  }
 }
