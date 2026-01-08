@@ -1,5 +1,6 @@
 import path from "node:path";
 import fs from "fs-extra";
+import inquirer from "inquirer";
 import {
   findTemplateBySlug,
   authorExists,
@@ -10,6 +11,7 @@ import {
   handlePackageManagerTransition,
   initNewGitRepo,
   updatePackageJson,
+  GitStrategy,
 } from "../utils";
 import { UI } from "../helpers/ui";
 
@@ -45,7 +47,7 @@ export async function scaffoldCommand(slugOrCommand: string, dest?: string) {
     }
 
     UI.dim(
-      "\nTip: Use 'scaffoldor sync' to update your registry or 'scaffoldor search' to find templates",
+      "\nTip: Use 'scaffoldor sync' to update your registry or 'scaffoldor search' to find templates"
     );
     process.exit(1);
   }
@@ -80,19 +82,41 @@ export async function scaffoldCommand(slugOrCommand: string, dest?: string) {
     }
     console.log("");
 
-    await cloneTemplate(template.url, absoluteDest);
+    // Ask user about git handling preference
+    const { gitChoice } = await inquirer.prompt<{ gitChoice: GitStrategy }>([
+      {
+        type: "list",
+        name: "gitChoice",
+        message: "How would you like to handle git?",
+        choices: [
+          {
+            name: "Fresh start (new repo with initial commit)",
+            value: "fresh",
+          },
+          { name: "Keep original git history", value: "keep" },
+          { name: "No git (remove .git entirely)", value: "remove" },
+        ],
+        default: "fresh",
+      },
+    ]);
+
+    await cloneTemplate(template.url, absoluteDest, gitChoice);
 
     // Update package.json name to match destination
     const projectName = path.basename(absoluteDest);
     await updatePackageJson(absoluteDest, projectName);
 
     await handlePackageManagerTransition(absoluteDest);
-    await initNewGitRepo(absoluteDest);
+
+    // Only init new repo if user chose "fresh"
+    if (gitChoice === "fresh") {
+      await initNewGitRepo(absoluteDest);
+    }
 
     UI.scaffoldSuccess(
       `${template.author.github}/${template.slug}`,
       destination,
-      template.url,
+      template.url
     );
   } catch (error) {
     UI.error("Error during scaffolding:");

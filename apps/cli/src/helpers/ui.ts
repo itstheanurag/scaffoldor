@@ -1,5 +1,5 @@
 import pc from "picocolors";
-import { CommunityTemplate } from "@repo/schema";
+import { TemplateWithUsername } from "../types";
 
 export const UI = {
   header: (text: string) => console.log(pc.cyan(`\n${text}\n`)),
@@ -14,9 +14,8 @@ export const UI = {
 
   dim: (text: string) => console.log(pc.dim(text)),
 
-  templateItem: (t: CommunityTemplate) => {
-    const authorPrefix = t.author.github ? `@${t.author.github}/` : "";
-    const name = pc.bold(pc.cyan(`${authorPrefix}${t.slug}`));
+  templateItem: (t: TemplateWithUsername) => {
+    const name = pc.bold(pc.cyan(`@${t.username}/${t.slug}`));
 
     const tierBadge =
       t.tier === "premium" ? pc.yellow(" [PREMIUM]") : pc.green(" [FREE]");
@@ -27,7 +26,7 @@ export const UI = {
 
     console.log(`${name}${tierBadge}`);
     console.log(
-      `${typeBadge}${frameworkBadge} ${t.description || "No description"}`,
+      `${typeBadge}${frameworkBadge} ${t.description || "No description"}`
     );
 
     if (t.tags.length > 0) {
@@ -36,7 +35,7 @@ export const UI = {
 
     if (t.author.name) {
       console.log(
-        `${pc.dim("Author:")} ${t.author.name}${t.author.github ? ` (@${t.author.github})` : ""}`,
+        `${pc.dim("Author:")} ${t.author.name}${t.author.github ? ` (@${t.author.github})` : ""}`
       );
     }
     console.log("");

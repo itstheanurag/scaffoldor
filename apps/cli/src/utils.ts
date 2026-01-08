@@ -6,19 +6,28 @@ import inquirer from "inquirer";
 
 const git = simpleGit();
 
-export async function cloneTemplate(url: string, dest: string) {
+export type GitStrategy = "keep" | "fresh" | "remove";
+
+export async function cloneTemplate(
+  url: string,
+  dest: string,
+  gitStrategy: GitStrategy = "fresh"
+) {
   console.log(pc.blue(`Cloning template from ${url}...`));
   await git.clone(url, dest);
 
   const gitDir = path.join(dest, ".git");
-  if (await fs.pathExists(gitDir)) {
+
+  if (gitStrategy === "keep") {
+    console.log(pc.green("Kept original git history."));
+  } else if (await fs.pathExists(gitDir)) {
     await fs.remove(gitDir);
     console.log(pc.green("Removed original .git history."));
   }
 }
 
 export async function detectPackageManager(
-  dir: string,
+  dir: string
 ): Promise<"npm" | "pnpm" | "yarn" | "bun" | "unknown"> {
   if (await fs.pathExists(path.join(dir, "package-lock.json"))) return "npm";
   if (await fs.pathExists(path.join(dir, "pnpm-lock.yaml"))) return "pnpm";
@@ -61,7 +70,10 @@ export async function handlePackageManagerTransition(dir: string) {
 export async function initNewGitRepo(dir: string) {
   const newGit = simpleGit(dir);
   await newGit.init();
-  console.log(pc.green("Initialized new git repository."));
+  await newGit.checkoutLocalBranch("main");
+  await newGit.add(".");
+  await newGit.commit("Initial commit from scaffoldor");
+  console.log(pc.green("Initialized new git repository with 'main' branch."));
 }
 
 export async function updatePackageJson(dir: string, name: string) {
@@ -74,7 +86,7 @@ export async function updatePackageJson(dir: string, name: string) {
       console.log(pc.green(`Updated package.json name to "${name}".`));
     } catch (error) {
       console.warn(
-        pc.yellow("Failed to update package.json name. Skipping..."),
+        pc.yellow("Failed to update package.json name. Skipping...")
       );
     }
   }

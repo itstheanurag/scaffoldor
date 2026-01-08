@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastUpdated": "2026-01-08T08:00:45.303Z",
+  "lastUpdated": "2026-01-08T10:48:08.833Z",
   "templates": {
     "ayushchug": [
       {
@@ -34,7 +34,7 @@
           "oauth"
         ],
         "author": {
-          "name": "Ayush chug",
+          "name": "Ayush Chug",
           "github": "ravixstudio"
         },
         "tier": "free",
@@ -67,7 +67,7 @@
           "modular-architecture"
         ],
         "author": {
-          "name": "Ayush chug",
+          "name": "Ayush Chug",
           "github": "ravixstudio"
         },
         "tier": "free",
@@ -100,7 +100,7 @@
           "modular-architecture"
         ],
         "author": {
-          "name": "Ayush chug",
+          "name": "Ayush Chug",
           "github": "ravixstudio"
         },
         "tier": "free",

@@ -27,7 +27,7 @@
                 "modular-architecture"
             ],
             "author": {
-                "name": "Ayush chug",
+                "name": "Ayush Chug",
                 "github": "ravixstudio"
             },
             "tier": "free",
@@ -60,7 +60,7 @@
                 "modular-architecture"
             ],
             "author": {
-              "name": "Ayush chug",
+                "name": "Ayush Chug",
                 "github": "ravixstudio"
             },
             "tier": "free",
@@ -97,8 +97,8 @@
                 "oauth"
             ],
             "author": {
-              "name": "Ayush chug",
-            "github": "ravixstudio"
+                "name": "Ayush Chug",
+                "github": "ravixstudio"
             },
             "tier": "free",
             "license": "MIT"

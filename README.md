@@ -26,6 +26,10 @@
 - **Clean starts** - Removes original git history and initializes a fresh repo
 - **Template directory** - Browse and discover popular templates (coming soon)
 
+## Demo
+
+<https://github.com/user-attachments/assets/0e3b86c6-d45b-4dc0-86e0-ce13897bcba0>
+
 ## Installation
 
 ```bash
