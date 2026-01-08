@@ -309,16 +309,16 @@ Planned architecture with web-hosted registry:
 ### Build Pipeline
 
 ```bash
-# Full build
+#### Full build
 turbo build
 
-# Development (all apps)
+#### Development (all apps)
 turbo dev
 
-# Type checking
+#### Type checking
 turbo check-types
 
-# Linting
+#### Linting
 turbo lint
 ```
 

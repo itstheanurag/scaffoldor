@@ -26,7 +26,7 @@ async function getUserDirs(): Promise<string[]> {
 }
 
 async function loadUserTemplates(
-  username: string
+  username: string,
 ): Promise<CommunityTemplate[]> {
   const filePath = `${CONTENT_DIR}/${username}/index.json`;
   const file = Bun.file(filePath);
