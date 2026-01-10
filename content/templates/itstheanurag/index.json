@@ -1,0 +1,35 @@
+{
+  "templates": [
+    {
+      "slug": "elysia-backend",
+      "name": "elysia backend template",
+      "url": "https://github.com/itstheanurag/elysia-backend-express",
+      "platform": "github",
+      "type": "backend",
+      "framework": "elysia",
+      "description": "Production ready Elysia + Bun + TypeScript template. It implements repository pattern, distributed rate limiting with the redis + sliding window algorithm, the application is containerized with docker and docker-compose. Redis support, Server Factory, OpenApi Documentation.",
+      "tags": [
+        "typescript",
+        "bun",
+        "postgres",
+        "redis",
+        "drizzle",
+        "elysia",
+        "openai"
+      ],
+      "features": [
+        "auth",
+        "rbac",
+        "data-tables",
+        "typesafe",
+        "modular-architecture"
+      ],
+      "author": {
+        "name": "Gaurav Kumar",
+        "github": "itstheanurag"
+      },
+      "tier": "free",
+      "license": "MIT"
+    }
+  ]
+}
