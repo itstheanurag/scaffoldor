@@ -47,21 +47,23 @@ export function TemplateSearch({ initialTemplates }: TemplateSearchProps) {
   }, [initialTemplates, search, selectedType, selectedFramework]);
 
   return (
-    <div className="space-y-8">
+    <div className="flex flex-col h-full overflow-hidden space-y-4">
       {/* Search and Filters */}
-      <div className="sticky top-20 z-40 -mx-1 px-1 py-4 bg-black/80 backdrop-blur-xl border-b border-neutral-800/50">
+      <div className="shrink-0 py-4 border-b border-neutral-800/50">
         <div className="flex flex-col md:flex-row gap-4">
-          <div className="relative flex-1 group">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FaSearch className="text-neutral-500 group-focus-within:text-emerald-500 transition-colors" />
+          <div className="flex flex-1 gap-4">
+            <div className="relative flex-1 group">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <FaSearch className="text-neutral-500 group-focus-within:text-emerald-500 transition-colors" />
+              </div>
+              <input
+                type="text"
+                placeholder="Search templates, authors, frameworks..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="block w-full pl-10 pr-3 py-2.5 border border-neutral-800 rounded-xl leading-5 bg-neutral-900/50 text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 transition-all"
+              />
             </div>
-            <input
-              type="text"
-              placeholder="Search templates, authors, frameworks..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="block w-full pl-10 pr-3 py-2.5 border border-neutral-800 rounded-xl leading-5 bg-neutral-900/50 text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 transition-all"
-            />
           </div>
 
           <div className="flex gap-4">
@@ -86,7 +88,7 @@ export function TemplateSearch({ initialTemplates }: TemplateSearchProps) {
       </div>
 
       {/* Results */}
-      <div className="min-h-[400px]">
+      <div className="flex-1 overflow-y-auto min-h-0 pb-20 pr-2 custom-scrollbar pt-4">
         {filteredTemplates.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <AnimatePresence mode="popLayout">
