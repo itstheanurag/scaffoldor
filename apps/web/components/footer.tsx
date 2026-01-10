@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState } from "react";
 import { CONTENT_LINKS } from "@/lib/link";
 import Link from "next/link";
@@ -10,7 +10,7 @@ export function Footer() {
 
   return (
     <>
-      <footer className="w-full border-t border-neutral-800 bg-neutral-950/20 py-6 md:py-0">
+      <footer className="mt-16 w-full border-t border-neutral-800 bg-neutral-950/20 py-6 md:py-0">
         <div className="container mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 md:h-16 md:flex-row">
           <p className="text-center text-sm leading-loose text-gray-400 md:text-left">
             Built by the community. Licensed under MIT.
