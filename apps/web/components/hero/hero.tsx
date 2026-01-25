@@ -1,12 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { FaTerminal } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa6";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { HeroDashboard } from "@/components/hero/dashboard";
 import { CONTENT_LINKS } from "@/lib/link";
 
 export function Hero() {
@@ -75,7 +75,7 @@ export function Hero() {
               href="/templates"
               className={cn(
                 buttonVariants({ variant: "primary", size: "lg" }),
-                "group"
+                "group",
               )}
             >
               Browse Templates
@@ -86,7 +86,7 @@ export function Hero() {
               target="_blank"
               className={cn(
                 buttonVariants({ variant: "secondary-action", size: "lg" }),
-                "group"
+                "group",
               )}
             >
               <FaTerminal className="mr-2 h-4 w-4" />
@@ -110,10 +110,17 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Dashboard Visual */}
+        {/* Hero Image */}
         <div className="w-full relative animate-fade-in-up delay-200 perspective-1000 group px-2 md:px-0">
           <div className="relative transform-style-3d transition-transform duration-700 hover:rotate-x-2 flex justify-center">
-            <HeroDashboard />
+            <Image
+              src="/scaffoldor.png"
+              alt="Scaffoldor - Template Gallery Preview"
+              width={1920}
+              height={1080}
+              className="w-full max-w-6xl rounded-lg border border-neutral-800 shadow-xl"
+              priority
+            />
 
             {/* Glow Effect */}
             <div className="absolute -inset-1 z-[-1] rounded-xl bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 opacity-20 blur-xl transition-opacity duration-500 group-hover:opacity-40 animate-glow-pulse max-w-5xl mx-auto" />
