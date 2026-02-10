@@ -1,12 +1,14 @@
 "use client";
 
 import { CommunityTemplateWithUsername } from "@/lib/registry";
+import Link from "next/link";
 import {
   FaGithub,
   FaGitlab,
   FaTerminal,
   FaCheck,
   FaCopy,
+  FaExternalLinkAlt,
 } from "react-icons/fa";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
@@ -55,9 +57,13 @@ export function TemplateCard({ template }: TemplateCardProps) {
           {/* Header: Author & Title & Source */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-neutral-400 group-hover:text-neutral-300 transition-colors">
-                {template._username}
-              </span>
+              <Link
+                href={`/templates/${template._username}`}
+                className="text-xs font-medium text-neutral-400 group-hover:text-neutral-300 transition-colors hover:text-white"
+                onClick={(e) => e.stopPropagation()}
+              >
+                @{template._username}
+              </Link>
               <a
                 href={template.url}
                 target="_blank"
@@ -67,11 +73,13 @@ export function TemplateCard({ template }: TemplateCardProps) {
               >
                 {template.platform === "gitlab" ? (
                   <div className="flex items-center gap-1">
-                    <FaGitlab size={14} /> <span className="text-xs">Source</span>
+                    <FaGitlab size={14} />{" "}
+                    <span className="text-xs">Source</span>
                   </div>
                 ) : (
                   <div className="flex items-center gap-1">
-                    <FaGithub size={14} /> <span className="text-xs">Source</span>
+                    <FaGithub size={14} />{" "}
+                    <span className="text-xs">Source</span>
                   </div>
                 )}
               </a>
@@ -131,7 +139,7 @@ export function TemplateCard({ template }: TemplateCardProps) {
           {/* Command Box */}
           <div
             onClick={copyCommand}
-            className="relative group/cmd flex items-center justify-between gap-3 px-2 py-1.5 rounded-lg bg-black/50 border border-neutral-800 hover:border-neutral-700 hover:bg-black transition-all cursor-pointer"
+            className="relative group/cmd flex items-center justify-between gap-3 px-2 py-1.5 rounded-lg bg-black/50 border border-neutral-800 hover:border-neutral-700 hover:bg-black transition-all cursor-pointer mb-3"
           >
             <div className="flex items-center gap-2 min-w-0">
               <FaTerminal className="text-neutral-600 shrink-0 text-[10px]" />
@@ -147,6 +155,16 @@ export function TemplateCard({ template }: TemplateCardProps) {
               )}
             </div>
           </div>
+
+          {/* View Details Link */}
+          <Link
+            href={`/templates/${template._username}/${template.slug}`}
+            className="flex items-center justify-center gap-2 w-full py-2 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-300 hover:text-white text-sm font-medium transition-colors"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <FaExternalLinkAlt className="text-xs" />
+            View Details
+          </Link>
         </div>
       </motion.div>
 

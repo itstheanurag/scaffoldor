@@ -31,7 +31,10 @@ export function getTemplatesByAuthor(): Record<string, CommunityTemplate[]> {
 /**
  * Get template by @author/slug format
  */
-export function getTemplateBySlug(slug: string): CommunityTemplate | undefined {
+export function getTemplateBySlug(
+  slug: string | undefined,
+): CommunityTemplate | undefined {
+  if (!slug) return undefined;
   // slug = @ayushchug/backend or ayushchug/backend
   const normalizedSlug = slug.startsWith("@") ? slug.slice(1) : slug;
   const [author, templateSlug] = normalizedSlug.split("/");
@@ -41,7 +44,10 @@ export function getTemplateBySlug(slug: string): CommunityTemplate | undefined {
 /**
  * Get all templates by an author
  */
-export function getAuthorTemplates(author: string): CommunityTemplate[] {
+export function getAuthorTemplates(
+  author: string | undefined,
+): CommunityTemplate[] {
+  if (!author) return [];
   const normalizedAuthor = author.startsWith("@") ? author.slice(1) : author;
   return registry.templates[normalizedAuthor] || [];
 }
