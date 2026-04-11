@@ -17,12 +17,40 @@
         "elysia",
         "openai"
       ],
+      "features": ["auth", "rbac", "typesafe", "modular-architecture"],
+      "author": {
+        "name": "Gaurav Kumar",
+        "github": "itstheanurag"
+      },
+      "tier": "free",
+      "license": "MIT"
+    },
+    {
+      "slug": "nest-backend",
+      "name": "NestJS Backend Template",
+      "url": "https://github.com/itstheanurag/nest-template-backend",
+      "platform": "github",
+      "type": "backend",
+      "framework": "nestjs",
+      "description": "Production-ready NestJS 11 boilerplate featuring Fastify, Drizzle ORM, Better-Auth, and BullMQ. Implements repository pattern, distributed background workers, and automated OpenAPI documentation with a custom Server Factory and Docker orchestration.",
+      "tags": [
+        "typescript",
+        "nestjs",
+        "fastify",
+        "postgres",
+        "redis",
+        "drizzle",
+        "docker",
+        "bullmq",
+        "swc"
+      ],
       "features": [
         "auth",
-        "rbac",
-        "data-tables",
+        "background-jobs",
         "typesafe",
-        "modular-architecture"
+        "modular-architecture",
+        "graceful-shutdown",
+        "multi-container-docker"
       ],
       "author": {
         "name": "Gaurav Kumar",

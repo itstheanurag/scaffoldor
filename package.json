@@ -2,10 +2,10 @@
   "name": "scaffoldor-app",
   "private": true,
   "scripts": {
-    "build": "turbo run build",
+    "build": "bun run build:registry && turbo run build",
     "build:registry": "bun run scripts/build-registry.ts",
-    "build:all": "bun run build:registry && turbo run build",
-    "dev": "turbo run dev",
+    "build:all": "bun run build",
+    "dev": "bun run build:registry && turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types"

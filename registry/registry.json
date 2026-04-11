@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastUpdated": "2026-01-10T17:04:51.727Z",
+  "lastUpdated": "2026-04-11T11:32:51.122Z",
   "templates": {
     "ayushchugh": [
       {
@@ -128,9 +128,42 @@
         "features": [
           "auth",
           "rbac",
-          "data-tables",
           "typesafe",
           "modular-architecture"
+        ],
+        "author": {
+          "name": "Gaurav Kumar",
+          "github": "itstheanurag"
+        },
+        "tier": "free",
+        "license": "MIT"
+      },
+      {
+        "slug": "nest-backend",
+        "name": "NestJS Backend Template",
+        "url": "https://github.com/itstheanurag/nest-template-backend",
+        "platform": "github",
+        "type": "backend",
+        "framework": "nestjs",
+        "description": "Production-ready NestJS 11 boilerplate featuring Fastify, Drizzle ORM, Better-Auth, and BullMQ. Implements repository pattern, distributed background workers, and automated OpenAPI documentation with a custom Server Factory and Docker orchestration.",
+        "tags": [
+          "typescript",
+          "nestjs",
+          "fastify",
+          "postgres",
+          "redis",
+          "drizzle",
+          "docker",
+          "bullmq",
+          "swc"
+        ],
+        "features": [
+          "auth",
+          "background-jobs",
+          "typesafe",
+          "modular-architecture",
+          "graceful-shutdown",
+          "multi-container-docker"
         ],
         "author": {
           "name": "Gaurav Kumar",
