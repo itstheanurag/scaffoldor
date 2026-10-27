@@ -44,17 +44,17 @@ export function CliOutputShowcase() {
         setDisplayedSteps((prev) => [...prev, step]);
 
         // Calculate how long to wait before showing the next step
-        let waitTime = 60; // Base minimal delay
+        let waitTime = 150; // Base delay between lines
 
         if (step.type === "command") {
-          // Wait for typing (50ms char) + buffer
-          waitTime = step.text.length * 18 + 200;
+          // Wait for typing (30ms char) + buffer
+          waitTime = step.text.length * 30 + 300;
         } else if (step.type === "process") {
-          waitTime = 250;
+          waitTime = 450;
         } else if (step.type === "prompt") {
-          waitTime = 350; // Wait for "user" to select
+          waitTime = 600; // Wait for "user" to select
         } else if (step.type === "success") {
-          waitTime = 500;
+          waitTime = 800;
         }
 
         await new Promise((resolve) => setTimeout(resolve, waitTime));
@@ -128,7 +128,7 @@ function Typewriter({ text }: { text: string }) {
       } else {
         clearInterval(interval);
       }
-    }, 18); // Matches the 18ms/char calculation in parent
+    }, 30); // Matches the 30ms/char calculation in parent
     return () => clearInterval(interval);
   }, [text]);
 
