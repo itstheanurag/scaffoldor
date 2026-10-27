@@ -17,6 +17,7 @@ import { motion } from "motion/react";
 import { TemplateDetailsModal } from "./template-details-modal";
 import { cn } from "@/lib/utils";
 import { formatFramework, formatLabel, toTitleCase } from "@/lib/format";
+import { FrameworkIcon } from "./framework-icon";
 
 interface TemplateCardProps {
   template: CommunityTemplateWithUsername;
@@ -48,7 +49,7 @@ export function TemplateCard({ template, index }: TemplateCardProps) {
     <>
       <motion.article
         layout
-        className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-neutral-800/80 bg-neutral-900/30 transition-colors duration-300 before:absolute before:inset-y-0 before:left-0 before:z-20 before:w-px before:bg-transparent before:transition-colors before:duration-300 hover:border-emerald-400/20 hover:bg-neutral-900/60 hover:before:bg-emerald-400/40"
+        className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-neutral-800/80 bg-neutral-900/30 transition-colors duration-300 before:absolute before:inset-y-0 before:left-0 before:z-20 before:w-px before:bg-transparent before:transition-colors before:duration-300 hover:border-emerald-400/20 hover:bg-neutral-900/60 hover:shadow-[0_20px_45px_-30px_rgba(0,0,0,0.9)] hover:before:bg-emerald-400/40"
       >
         {/* Whole-card link sits behind the content. */}
         <Link
@@ -111,7 +112,10 @@ export function TemplateCard({ template, index }: TemplateCardProps) {
                   variant="outline"
                   className="gap-1.5 border-neutral-700/80 bg-neutral-950/60 px-2 py-0.5 text-[11px] font-medium text-neutral-300"
                 >
-                  <span className="h-1 w-1 rounded-full bg-emerald-400/80" />
+                  <FrameworkIcon
+                    framework={template.framework}
+                    className="h-3 w-3 text-emerald-400/80"
+                  />
                   {formatFramework(template.framework)}
                 </Badge>
               )}
@@ -156,7 +160,6 @@ export function TemplateCard({ template, index }: TemplateCardProps) {
                 <FaCopy className="shrink-0 text-[10px] text-neutral-600 transition-colors group-hover:text-neutral-400" />
               )}
             </button>
-
             <div className="mt-3 flex items-center justify-between gap-3 text-xs">
               <Link
                 href={`/templates/${template._username}`}
@@ -185,10 +188,14 @@ export function TemplateCard({ template, index }: TemplateCardProps) {
                   <FaEye className="text-[11px]" />
                   <span className="text-[11px]">Preview</span>
                 </button>
-                <span className="hidden items-center gap-1 text-[11px] font-medium text-neutral-500 transition-colors group-hover:text-emerald-300/80 sm:flex">
+                <Link
+                  href={detailHref}
+                  onClick={(e) => e.stopPropagation()}
+                  className="pointer-events-auto hidden items-center gap-1 text-[11px] font-medium text-neutral-500 transition-colors hover:text-emerald-300/80 group-hover:text-emerald-300/80 sm:flex"
+                >
                   Details
                   <FaArrowRight className="text-[9px] transition-transform group-hover:translate-x-0.5" />
-                </span>
+                </Link>
               </div>
             </div>
           </div>

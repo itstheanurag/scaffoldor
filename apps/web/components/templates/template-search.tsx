@@ -1,12 +1,14 @@
 "use client";
 
 import { CommunityTemplateWithUsername } from "@/lib/registry";
+import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { TemplateCard } from "./template-card";
-import { FaSearch, FaTimes } from "react-icons/fa";
+import { FaArrowRight, FaPlus, FaSearch, FaTimes } from "react-icons/fa";
 import { AnimatePresence, motion } from "motion/react";
 import { Dropdown } from "../ui/dropdown";
 import { formatFramework, formatLabel } from "@/lib/format";
+import { CONTENT_LINKS } from "@/lib/link";
 
 interface TemplateSearchProps {
   initialTemplates: CommunityTemplateWithUsername[];
@@ -204,11 +206,22 @@ export function TemplateSearch({
       {/* Result summary and active filters */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm text-neutral-400" aria-live="polite">
-          <span className="font-semibold text-neutral-200">
-            {filteredTemplates.length}
-          </span>{" "}
-          of {initialTemplates.length} template
-          {initialTemplates.length === 1 ? "" : "s"}
+          {hasFilters ? (
+            <>
+              <span className="font-semibold text-neutral-200">
+                {filteredTemplates.length}
+              </span>{" "}
+              of {initialTemplates.length} template
+              {initialTemplates.length === 1 ? "" : "s"}
+            </>
+          ) : (
+            <>
+              <span className="font-semibold text-neutral-200">
+                {initialTemplates.length}
+              </span>{" "}
+              template{initialTemplates.length === 1 ? "" : "s"} in the registry
+            </>
+          )}
         </p>
 
         {hasFilters && (
@@ -257,6 +270,40 @@ export function TemplateSearch({
               />
             ))}
           </AnimatePresence>
+
+          {/* Completes the last row on a three-column grid and gives people a
+              way to contribute without leaving the catalog. */}
+          {filteredTemplates.length % 3 === 2 && (
+            <Link
+              href={`${CONTENT_LINKS.GITHUB}/blob/main/content/templates/CONTRIBUTING.md`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex h-full min-h-[260px] flex-col justify-between rounded-2xl border border-dashed border-neutral-800 bg-neutral-950/40 p-5 transition-colors hover:border-emerald-400/25 hover:bg-neutral-900/30"
+            >
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-neutral-600">
+                  Next
+                </span>
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-800 bg-neutral-900 text-neutral-500 transition-colors group-hover:border-emerald-400/20 group-hover:text-emerald-300">
+                  <FaPlus className="h-3 w-3" />
+                </span>
+              </div>
+
+              <div className="mt-8">
+                <h3 className="text-lg font-semibold text-neutral-300">
+                  Your template here.
+                </h3>
+                <p className="mt-2 max-w-[28ch] text-sm leading-relaxed text-neutral-500">
+                  Add a starter to the open registry and help the next developer
+                  ship faster.
+                </p>
+                <span className="mt-5 inline-flex items-center gap-2 text-xs font-medium text-emerald-300/80">
+                  Submit a template
+                  <FaArrowRight className="text-[9px] transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </div>
+            </Link>
+          )}
         </motion.div>
       ) : (
         <motion.div
