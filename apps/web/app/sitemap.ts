@@ -1,40 +1,45 @@
 import { MetadataRoute } from "next";
-import { getAllTemplates, getAllAuthors } from "@/lib/registry";
+import { getAllTemplates, getAllAuthors, registry } from "@/lib/registry";
+import { SITE_URL } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://scaffoldor.vercel.app";
-
   const templates = getAllTemplates();
   const authors = getAllAuthors();
 
+  // Use the registry timestamp so unchanged registries produce a stable sitemap.
+  const lastModified = new Date(registry.lastUpdated);
+  const lastModifiedDate = Number.isNaN(lastModified.getTime())
+    ? new Date()
+    : lastModified;
+
   const templateUrls = templates.map((template) => ({
-    url: `${baseUrl}/templates/${template._username}/${template.slug}`,
-    lastModified: new Date(),
+    url: `${SITE_URL}/templates/${template._username}/${template.slug}`,
+    lastModified: lastModifiedDate,
     changeFrequency: "weekly" as const,
     priority: 0.8,
   }));
 
   const authorUrls = authors.map((author) => ({
-    url: `${baseUrl}/templates/${author}`,
-    lastModified: new Date(),
+    url: `${SITE_URL}/templates/${author}`,
+    lastModified: lastModifiedDate,
     changeFrequency: "weekly" as const,
     priority: 0.6,
   }));
 
   return [
     {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: "daily",
+      url: SITE_URL,
+      lastModified: lastModifiedDate,
+      changeFrequency: "weekly",
       priority: 1,
     },
     {
-      url: `${baseUrl}/templates`,
-      lastModified: new Date(),
+      url: `${SITE_URL}/templates`,
+      lastModified: lastModifiedDate,
       changeFrequency: "daily",
       priority: 0.9,
     },
-    ...templateUrls,
     ...authorUrls,
+    ...templateUrls,
   ];
 }

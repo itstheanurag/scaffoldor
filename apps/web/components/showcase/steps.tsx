@@ -65,10 +65,10 @@ export function StepsShowcase() {
           className="flex flex-col gap-1"
         >
           <div className="flex items-center gap-3">
-            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-neutral-800 text-xs font-mono text-white">
+            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-neutral-800 text-xs font-mono text-neutral-200">
               {index + 1}
             </div>
-            <h3 className="font-medium text-white">{feature.title}</h3>
+            <h3 className="font-medium text-neutral-200">{feature.title}</h3>
           </div>
           <p className="pl-9 text-sm text-gray-400 leading-relaxed">
             {feature.description}

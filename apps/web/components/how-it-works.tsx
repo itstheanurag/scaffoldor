@@ -69,7 +69,8 @@ export function HowItWorks() {
             transition={{ duration: 1, delay: 0.5 }}
           >
             <span className="text-blue-400">➜</span>{" "}
-            <span className="text-neutral-400">~</span> npx scaffoldor init
+            <span className="text-neutral-400">~</span> npx scaffoldor
+            @ayushchugh/backend
             <motion.span
               animate={{ opacity: [0, 1, 0] }}
               transition={{ repeat: Infinity, duration: 0.8 }}

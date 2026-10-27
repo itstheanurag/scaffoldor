@@ -4,9 +4,16 @@ import { motion } from "motion/react";
 import { useState, useEffect } from "react";
 
 const steps = [
-  { type: "command", text: "npx scaffoldor init my-app" },
+  {
+    type: "command",
+    text: "npx scaffoldor @ayushchugh/backend my-app",
+  },
   { type: "output", text: " " },
-  { type: "prompt", text: "Select a template:", value: "nextjs-starter" },
+  {
+    type: "prompt",
+    text: "How should git history be handled?",
+    value: "fresh",
+  },
   { type: "prompt", text: "Select package manager:", value: "pnpm" },
   { type: "output", text: " " },
   { type: "process", text: "Resolving packages..." },
@@ -18,8 +25,10 @@ const steps = [
   { type: "info", text: "pnpm dev" },
 ];
 
+type Step = (typeof steps)[number];
+
 export function CliOutputShowcase() {
-  const [displayedSteps, setDisplayedSteps] = useState<any[]>([]);
+  const [displayedSteps, setDisplayedSteps] = useState<Step[]>([]);
 
   useEffect(() => {
     let isMounted = true;
@@ -70,7 +79,7 @@ export function CliOutputShowcase() {
           className="mb-1"
         >
           {step.type === "command" && (
-            <div className="flex items-center gap-2 text-white">
+            <div className="flex items-center gap-2 text-neutral-200">
               <span className="text-blue-500">➜</span>
               <span className="text-cyan-400">~</span>
               <Typewriter text={step.text} />
@@ -79,7 +88,7 @@ export function CliOutputShowcase() {
           {step.type === "prompt" && (
             <div className="flex items-center gap-2">
               <span className="text-green-500">?</span>
-              <span className="font-bold text-white">{step.text}</span>
+              <span className="font-bold text-neutral-200">{step.text}</span>
               <span className="text-cyan-500">{step.value}</span>
             </div>
           )}

@@ -88,3 +88,29 @@ export function searchTemplates(query: string): CommunityTemplate[] {
 export function getAllAuthors(): string[] {
   return Object.keys(registry.templates);
 }
+
+/**
+ * Tags are free-form in submissions and may repeat, or repeat the framework
+ * and category labels already shown as badges. Normalize them for display so
+ * React keys stay unique and the card stays readable.
+ */
+export function getDisplayTags(
+  template: Pick<CommunityTemplate, "tags" | "framework" | "type">,
+): string[] {
+  const seen = new Set<string>();
+  const framework = template.framework.toLowerCase();
+  const type = template.type.toLowerCase();
+
+  return template.tags.filter((tag) => {
+    const normalized = tag.toLowerCase();
+    if (
+      normalized === framework ||
+      normalized === type ||
+      seen.has(normalized)
+    ) {
+      return false;
+    }
+    seen.add(normalized);
+    return true;
+  });
+}

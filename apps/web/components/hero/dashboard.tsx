@@ -125,7 +125,7 @@ export function HeroDashboard() {
                     {template.icon}
                   </div>
                   <div className="opacity-0 transition-opacity group-hover:opacity-100">
-                    <div className="rounded-full bg-neutral-800 p-1.5 text-neutral-400 hover:text-white cursor-pointer">
+                    <div className="rounded-full bg-neutral-800 p-1.5 text-neutral-400 hover:text-neutral-100 cursor-pointer">
                       <FaPlus className="h-3 w-3" />
                     </div>
                   </div>
@@ -147,9 +147,6 @@ export function HeroDashboard() {
               </motion.div>
             ))}
           </div>
-
-          {/* Fade out bottom */}
-          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-neutral-950/20 to-transparent pointer-events-none" />
         </div>
       </div>
     </div>

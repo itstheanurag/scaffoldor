@@ -30,14 +30,24 @@ export function Dropdown({
         setIsOpen(false);
       }
     }
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") setIsOpen(false);
+    }
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   return (
     <div className="relative min-w-[160px]" ref={containerRef}>
       <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
         className={`w-full flex items-center justify-between px-3 py-2.5 border rounded-xl bg-neutral-900/50 text-sm transition-all ${
           isOpen
             ? "border-emerald-500/50 ring-2 ring-emerald-500/20 text-emerald-400"
@@ -65,6 +75,7 @@ export function Dropdown({
           >
             <div className="max-h-[240px] overflow-y-auto custom-scrollbar">
               <button
+                type="button"
                 onClick={() => {
                   onChange("all");
                   setIsOpen(false);
@@ -80,6 +91,7 @@ export function Dropdown({
               </button>
               {options.map((option) => (
                 <button
+                  type="button"
                   key={option}
                   onClick={() => {
                     onChange(option);

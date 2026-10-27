@@ -54,11 +54,11 @@ export function SchemaViewerModal({ isOpen, onClose }: SchemaViewerModalProps) {
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-700 bg-neutral-900/95 backdrop-blur-sm">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-              <FaInfoCircle className="text-white text-sm" />
+            <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center">
+              <FaInfoCircle className="text-neutral-200 text-sm" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-white">
+              <h2 className="text-lg font-semibold text-neutral-200">
                 Registry Schema
               </h2>
               <p className="text-xs text-neutral-400">
@@ -68,7 +68,7 @@ export function SchemaViewerModal({ isOpen, onClose }: SchemaViewerModalProps) {
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-neutral-400 hover:text-white hover:bg-neutral-800 rounded-lg transition-colors"
+            className="p-2 text-neutral-400 hover:text-neutral-100 hover:bg-neutral-800 rounded-lg transition-colors"
             aria-label="Close modal"
           >
             <FaTimes className="w-5 h-5" />
@@ -82,7 +82,7 @@ export function SchemaViewerModal({ isOpen, onClose }: SchemaViewerModalProps) {
             className={`px-6 py-3 text-sm font-medium transition-colors ${
               activeTab === "fields"
                 ? "text-emerald-400 border-b-2 border-emerald-400 bg-neutral-800/50"
-                : "text-neutral-400 hover:text-white hover:bg-neutral-800/30"
+                : "text-neutral-400 hover:text-neutral-100 hover:bg-neutral-800/30"
             }`}
           >
             Schema Fields
@@ -92,7 +92,7 @@ export function SchemaViewerModal({ isOpen, onClose }: SchemaViewerModalProps) {
             className={`px-6 py-3 text-sm font-medium transition-colors ${
               activeTab === "example"
                 ? "text-emerald-400 border-b-2 border-emerald-400 bg-neutral-800/50"
-                : "text-neutral-400 hover:text-white hover:bg-neutral-800/30"
+                : "text-neutral-400 hover:text-neutral-100 hover:bg-neutral-800/30"
             }`}
           >
             Example Template

@@ -1,6 +1,6 @@
 import { Variants } from "motion/react";
 
-export const navVariants = {
+export const navVariants: Variants = {
   top: {
     y: 0,
     backgroundColor: "rgba(0,0,0,0)",

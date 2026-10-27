@@ -12,15 +12,6 @@ import { CONTENT_LINKS } from "@/lib/link";
 export function Hero() {
   return (
     <section className="relative overflow-hidden bg-neutral-950 py-24">
-      {/* Ambient Gradient Background */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(226, 232, 240, 0.15), transparent 70%), #000000",
-        }}
-      />
-
       {/* Noise Overlay */}
       <div className="absolute inset-0 z-0 opacity-[0.06] mix-blend-overlay pointer-events-none">
         <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -58,9 +49,9 @@ export function Hero() {
           </div>
 
           <div className="space-y-4">
-            <h1 className="text-[2.5rem] font-semibold leading-[1.1] tracking-tight text-white md:text-[4rem]">
-              Start <span className="text-neutral-100">Faster</span> with{" "}
-              <span className="text-neutral-100">Production-Ready</span>{" "}
+            <h1 className="text-[2.5rem] font-semibold leading-[1.1] tracking-tight text-neutral-200 md:text-[4rem]">
+              Start <span className="text-neutral-200">Faster</span> with{" "}
+              <span className="text-neutral-200">Production-Ready</span>{" "}
               Templates
             </h1>
             <p className="max-w-[48ch] mx-auto text-lg text-neutral-400">
@@ -121,9 +112,6 @@ export function Hero() {
               className="w-full max-w-6xl rounded-lg border border-neutral-800 shadow-xl"
               priority
             />
-
-            {/* Glow Effect */}
-            <div className="absolute -inset-1 z-[-1] rounded-xl bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 opacity-20 blur-xl transition-opacity duration-500 group-hover:opacity-40 animate-glow-pulse max-w-5xl mx-auto" />
           </div>
         </div>
       </div>
