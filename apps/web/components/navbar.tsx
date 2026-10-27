@@ -20,6 +20,10 @@ const navItems: NavItem[] = [
     url: "/templates",
   },
   {
+    label: "Registry",
+    url: "/#registry",
+  },
+  {
     label: "CLI",
     url: CONTENT_LINKS.CLI_INSTALL,
   },
@@ -71,7 +75,7 @@ export function Navbar() {
                   target={item.url.startsWith("/") ? "_self" : "_blank"}
                   rel={item.url.startsWith("/") ? "" : "noopener noreferrer"}
                   className="text-sm font-medium text-neutral-400 hover:text-neutral-200 transition-colors"
-                  scroll={false}
+                  scroll={!item.url.includes("#")}
                 >
                   {item.label}
                 </Link>
@@ -121,7 +125,7 @@ export function Navbar() {
                   target={item.url.startsWith("/") ? "_self" : "_blank"}
                   rel={item.url.startsWith("/") ? "" : "noopener noreferrer"}
                   className="text-lg font-medium text-neutral-300 hover:text-neutral-100 transition-colors"
-                  scroll={false}
+                  scroll={!item.url.includes("#")}
                 >
                   {item.label}
                 </Link>

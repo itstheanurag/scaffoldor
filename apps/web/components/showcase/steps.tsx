@@ -36,7 +36,7 @@ const features = [
   {
     title: "Smart Install",
     description:
-      "Detects your preferred package manager (npm, pnpm, bun) and installs dependencies.",
+      "Detects npm, pnpm, yarn, and bun, then switches lockfiles to match your choice.",
   },
   {
     title: "Fresh Start",
@@ -45,7 +45,8 @@ const features = [
   },
   {
     title: "Universal Support",
-    description: "Works seamlessly with any GitHub or GitLab repository URL.",
+    description:
+      "Works with GitHub, GitLab, and self-hosted Git URLs — including subdirectories.",
   },
 ];
 

@@ -19,11 +19,11 @@ export function TemplatePreview() {
               From the registry
             </p>
             <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
-              Popular templates
+              Real projects, ready to clone.
             </h2>
             <p className="mt-3 max-w-[600px] text-gray-400">
-              Community-curated starters to get moving in seconds. Every entry
-              is a real repository you can inspect before you clone it.
+              Every entry is a real repository you can inspect before you run a
+              single command.
             </p>
           </div>
 

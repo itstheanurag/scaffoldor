@@ -82,8 +82,8 @@ export function HowItWorks() {
     },
     {
       icon: <FaCogs className="h-6 w-6" />,
-      title: "Customize Setup",
-      description: "Preferred Package managers",
+      title: "Choose Your Setup",
+      description: "Pick a package manager and git strategy.",
       animatedCard: (
         <div className="relative h-24 w-full overflow-hidden rounded-lg border border-neutral-800 bg-neutral-950 p-3">
           <div className="space-y-3">

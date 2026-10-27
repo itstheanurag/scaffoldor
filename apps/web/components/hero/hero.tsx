@@ -1,7 +1,5 @@
-"use client";
-
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
 import { FaTerminal } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa6";
 import { Badge } from "@/components/ui/badge";
@@ -9,11 +7,31 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CONTENT_LINKS } from "@/lib/link";
 
-export function Hero() {
+interface HeroProps {
+  templateCount: number;
+  frameworkCount: number;
+  authorCount: number;
+}
+
+export function Hero({
+  templateCount,
+  frameworkCount,
+  authorCount,
+}: HeroProps) {
   return (
-    <section className="relative overflow-hidden bg-neutral-950 py-24">
+    <section className="relative overflow-hidden bg-neutral-950 pb-16 pt-32 md:pb-20 md:pt-36">
+      {/* Ambient curved gradient */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(226, 232, 240, 0.15), transparent 70%), #000000",
+        }}
+      />
+
       {/* Noise Overlay */}
-      <div className="absolute inset-0 z-0 opacity-[0.06] mix-blend-overlay pointer-events-none">
+      <div className="pointer-events-none absolute inset-0 z-0 opacity-[0.06] mix-blend-overlay">
         <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
           <filter id="noiseFilter">
             <feTurbulence
@@ -27,37 +45,35 @@ export function Hero() {
         </svg>
       </div>
 
-      <div className="container relative z-10 mx-auto px-6 max-w-7xl flex flex-col items-center text-center mt-16">
-        {/* Header Content Vertical Flow */}
-        <div className="flex flex-col items-center space-y-8 animate-fade-in-up max-w-3xl mx-auto mb-16">
+      <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-center px-4 text-center sm:px-6 lg:px-8">
+        <div className="flex max-w-3xl animate-fade-in-up flex-col items-center space-y-7">
           <div className="flex flex-wrap items-center justify-center gap-2">
             <Badge
               variant="subtle-outline"
               className="flex items-center gap-2 px-3 py-1 text-xs"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-              Community Templates
+              {templateCount} community templates
             </Badge>
 
             <Badge
               variant="subtle-fill"
               className="flex items-center gap-2 px-3 py-1 text-xs"
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
-              Premium One-Time Purchase
+              <span className="h-1.5 w-1.5 rounded-full bg-neutral-400" />
+              GitHub &amp; GitLab
             </Badge>
           </div>
 
           <div className="space-y-4">
-            <h1 className="text-[2.5rem] font-semibold leading-[1.1] tracking-tight text-neutral-200 md:text-[4rem]">
-              Start <span className="text-neutral-200">Faster</span> with{" "}
-              <span className="text-neutral-200">Production-Ready</span>{" "}
-              Templates
+            <h1 className="text-balance text-[2.5rem] font-semibold leading-[1.05] tracking-tight text-neutral-200 md:text-[4rem]">
+              Start with a template that{" "}
+              <span className="text-emerald-300/80">already works.</span>
             </h1>
-            <p className="max-w-[48ch] mx-auto text-lg text-neutral-400">
-              Discover, preview, and download curated GitHub and GitLab
-              templates. Free community starters or premium, one-time purchase
-              templates with lifetime access.
+            <p className="mx-auto max-w-[52ch] text-pretty text-lg leading-relaxed text-neutral-400">
+              Browse community-built starters for web, backend, mobile, and CLI
+              projects. Inspect the stack, copy one command, and get a clean
+              project in seconds.
             </p>
           </div>
 
@@ -85,36 +101,39 @@ export function Hero() {
             </Link>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-neutral-500">
-            <span className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-neutral-600" />
-              No Git History Included
-            </span>
-            <span className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-neutral-600" />
-              Works with GitHub & GitLab
-            </span>
-            <span className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-neutral-600" />
-              Choose Your Package Manager
-            </span>
-          </div>
+          <dl className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+            <Stat value={templateCount} label="Templates" />
+            <Stat value={frameworkCount} label="Stacks" />
+            <Stat value={authorCount} label="Contributors" />
+          </dl>
         </div>
 
-        {/* Hero Image */}
-        <div className="w-full relative animate-fade-in-up delay-200 perspective-1000 group px-2 md:px-0">
-          <div className="relative transform-style-3d transition-transform duration-700 hover:rotate-x-2 flex justify-center">
+        <div className="relative mt-14 w-full max-w-6xl animate-fade-in-up delay-200">
+          <div className="flex justify-center">
             <Image
               src="/scaffoldor.png"
-              alt="Scaffoldor - Template Gallery Preview"
+              alt="Scaffoldor template gallery"
               width={1920}
               height={1080}
-              className="w-full max-w-6xl rounded-lg border border-neutral-800 shadow-xl"
+              className="w-full rounded-xl border border-neutral-800 shadow-2xl"
               priority
             />
           </div>
         </div>
       </div>
     </section>
+  );
+}
+
+function Stat({ value, label }: { value: number; label: string }) {
+  return (
+    <div className="flex items-baseline gap-2">
+      <dt className="order-2 font-mono text-[10px] uppercase tracking-[0.18em] text-neutral-500">
+        {label}
+      </dt>
+      <dd className="order-1 text-lg font-semibold tabular-nums text-neutral-200">
+        {value}
+      </dd>
+    </div>
   );
 }

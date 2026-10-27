@@ -7,6 +7,7 @@ import { Community } from "@/components/community";
 import { Footer } from "@/components/footer";
 import { CliShowcase } from "@/components/showcase/showcase";
 import { JsonLd } from "@/components/json-ld";
+import { getAllTemplates } from "@/lib/registry";
 import {
   SITE_DESCRIPTION,
   SITE_NAME,
@@ -68,12 +69,25 @@ const structuredData = {
 };
 
 export default function Home() {
+  const templates = getAllTemplates();
+  const frameworkCount = new Set(
+    templates
+      .map((template) => template.framework)
+      .filter((framework) => framework !== "none"),
+  ).size;
+  const authorCount = new Set(templates.map((template) => template._username))
+    .size;
+
   return (
     <div className="flex min-h-screen flex-col">
       <JsonLd data={structuredData} />
       <Navbar />
       <main className="w-full flex-1">
-        <Hero />
+        <Hero
+          templateCount={templates.length}
+          frameworkCount={frameworkCount}
+          authorCount={authorCount}
+        />
         <HowItWorks />
         <CliShowcase />
         <TemplatePreview />
