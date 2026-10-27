@@ -69,7 +69,8 @@ export function HowItWorks() {
             transition={{ duration: 1, delay: 0.5 }}
           >
             <span className="text-blue-400">➜</span>{" "}
-            <span className="text-neutral-400">~</span> npx scaffoldor init
+            <span className="text-neutral-400">~</span> npx scaffoldor
+            @ayushchugh/backend
             <motion.span
               animate={{ opacity: [0, 1, 0] }}
               transition={{ repeat: Infinity, duration: 0.8 }}
@@ -81,8 +82,8 @@ export function HowItWorks() {
     },
     {
       icon: <FaCogs className="h-6 w-6" />,
-      title: "Customize Setup",
-      description: "Preferred Package managers",
+      title: "Choose Your Setup",
+      description: "Pick a package manager and git strategy.",
       animatedCard: (
         <div className="relative h-24 w-full overflow-hidden rounded-lg border border-neutral-800 bg-neutral-950 p-3">
           <div className="space-y-3">
@@ -145,7 +146,7 @@ export function HowItWorks() {
   ];
 
   return (
-    <section className="border-y border-neutral-800 bg-neutral-900/20 py-12 md:py-24 lg:py-32">
+    <section className="border-y border-neutral-800 bg-neutral-900/30 py-12 md:py-24 lg:py-32">
       <div className="container mx-auto space-y-4 max-w-7xl px-4">
         <h2 className="text-3xl font-bold tracking-tight md:text-4xl text-balance">
           How it works

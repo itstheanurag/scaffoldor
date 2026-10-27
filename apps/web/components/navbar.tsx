@@ -20,6 +20,10 @@ const navItems: NavItem[] = [
     url: "/templates",
   },
   {
+    label: "Registry",
+    url: "/#registry",
+  },
+  {
     label: "CLI",
     url: CONTENT_LINKS.CLI_INSTALL,
   },
@@ -71,7 +75,7 @@ export function Navbar() {
                   target={item.url.startsWith("/") ? "_self" : "_blank"}
                   rel={item.url.startsWith("/") ? "" : "noopener noreferrer"}
                   className="text-sm font-medium text-neutral-400 hover:text-neutral-200 transition-colors"
-                  scroll={false}
+                  scroll={!item.url.includes("#")}
                 >
                   {item.label}
                 </Link>
@@ -86,7 +90,7 @@ export function Navbar() {
               href={CONTENT_LINKS.GITHUB}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-900 border border-neutral-800 text-sm font-medium text-white hover:bg-neutral-800 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-900 border border-neutral-800 text-sm font-medium text-neutral-200 hover:bg-neutral-800 transition-colors"
             >
               <BsStar size={16} />
               Star on GitHub
@@ -120,8 +124,8 @@ export function Navbar() {
                   href={item.url}
                   target={item.url.startsWith("/") ? "_self" : "_blank"}
                   rel={item.url.startsWith("/") ? "" : "noopener noreferrer"}
-                  className="text-lg font-medium text-neutral-300 hover:text-white transition-colors"
-                  scroll={false}
+                  className="text-lg font-medium text-neutral-300 hover:text-neutral-100 transition-colors"
+                  scroll={!item.url.includes("#")}
                 >
                   {item.label}
                 </Link>
@@ -133,7 +137,7 @@ export function Navbar() {
                 href={CONTENT_LINKS.GITHUB}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 py-3 rounded-lg bg-neutral-900 border border-neutral-800 text-sm font-medium text-white"
+                className="flex items-center justify-center gap-2 py-3 rounded-lg bg-neutral-900 border border-neutral-800 text-sm font-medium text-neutral-200"
               >
                 <BsStar size={18} />
                 Star on GitHub

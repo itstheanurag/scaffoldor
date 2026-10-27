@@ -36,7 +36,7 @@ const features = [
   {
     title: "Smart Install",
     description:
-      "Detects your preferred package manager (npm, pnpm, bun) and installs dependencies.",
+      "Detects npm, pnpm, yarn, and bun, then switches lockfiles to match your choice.",
   },
   {
     title: "Fresh Start",
@@ -45,7 +45,8 @@ const features = [
   },
   {
     title: "Universal Support",
-    description: "Works seamlessly with any GitHub or GitLab repository URL.",
+    description:
+      "Works with GitHub, GitLab, and self-hosted Git URLs — including subdirectories.",
   },
 ];
 
@@ -65,10 +66,10 @@ export function StepsShowcase() {
           className="flex flex-col gap-1"
         >
           <div className="flex items-center gap-3">
-            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-neutral-800 text-xs font-mono text-white">
+            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-neutral-800 text-xs font-mono text-neutral-200">
               {index + 1}
             </div>
-            <h3 className="font-medium text-white">{feature.title}</h3>
+            <h3 className="font-medium text-neutral-200">{feature.title}</h3>
           </div>
           <p className="pl-9 text-sm text-gray-400 leading-relaxed">
             {feature.description}

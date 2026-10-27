@@ -1,75 +1,62 @@
-import {
-  searchTemplates,
-  getAllTemplates,
-  getAuthorTemplates,
-} from "../registry";
+import { searchTemplates } from "../registry";
 import { UI } from "../helpers/ui";
-import { TemplateWithUsername } from "../types";
+import {
+  normalizeAuthor,
+  normalizeFramework,
+  normalizeType,
+} from "../helpers/options";
+import type { TemplateWithUsername } from "../types";
 
 export interface ListOptions {
   remote?: boolean;
   type?: string;
   framework?: string;
   author?: string;
+  json?: boolean;
 }
 
 export async function listCommand(options: ListOptions) {
-  let templates: TemplateWithUsername[];
+  const type = normalizeType(options.type);
+  const framework = normalizeFramework(options.framework);
+  const author = normalizeAuthor(options.author);
 
-  if (options.remote) {
+  if (options.remote && !options.json) {
     UI.info("Fetching from remote registry...");
-    templates = await searchTemplates({
-      type: options.type,
-      framework: options.framework,
-    });
-
-    // Manual filter for remote author if provided (since searchTemplates doesn't support it yet)
-    if (options.author) {
-      const normalizedAuthor = options.author.startsWith("@")
-        ? options.author.slice(1)
-        : options.author;
-      templates = templates.filter((t) => t.author.github === normalizedAuthor);
-    }
-  } else {
-    if (options.author) {
-      templates = await getAuthorTemplates(options.author);
-
-      // Apply filters if provided
-      if (options.type) {
-        templates = templates.filter((t) => t.type === options.type);
-      }
-      if (options.framework) {
-        templates = templates.filter((t) => t.framework === options.framework);
-      }
-    } else {
-      templates = await getAllTemplates();
-
-      // Apply filters if provided
-      if (options.type) {
-        templates = templates.filter((t) => t.type === options.type);
-      }
-      if (options.framework) {
-        templates = templates.filter((t) => t.framework === options.framework);
-      }
-    }
   }
 
-  if (templates.length === 0) {
-    if (options.author) {
-      UI.warn(`No templates found for user '${options.author}'.`);
+  const templates = await searchTemplates({
+    type,
+    framework,
+    author,
+    includeRemote: Boolean(options.remote),
+  });
+
+  const sorted = [...templates].sort((a, b) => {
+    const authorCompare = a.username.localeCompare(b.username);
+    return authorCompare !== 0 ? authorCompare : a.slug.localeCompare(b.slug);
+  });
+
+  if (options.json) {
+    console.log(JSON.stringify(sorted, null, 2));
+    return;
+  }
+
+  if (sorted.length === 0) {
+    if (author) {
+      UI.warn(`No templates found for user '@${author}'.`);
     } else {
       UI.warn("No templates found.");
     }
 
     if (!options.remote) {
-      UI.dim("Tip: Use --remote to search the community registry");
+      UI.dim("Tip: Use --remote to include the community registry.");
     }
     return;
   }
 
   UI.header("Available Templates:");
 
-  templates.forEach((t) => UI.templateItem(t));
+  sorted.forEach((template: TemplateWithUsername) => UI.templateItem(template));
 
-  UI.dim(`Total: ${templates.length} template(s)\n`);
+  UI.dim(`Total: ${sorted.length} template(s)\n`);
 }

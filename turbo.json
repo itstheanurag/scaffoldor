@@ -11,7 +11,7 @@
         "$TURBO_ROOT$/content/templates/**",
         "$TURBO_ROOT$/scripts/build-registry.ts"
       ],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "lint": {
       "dependsOn": ["^lint"]

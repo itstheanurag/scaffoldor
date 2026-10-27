@@ -1,9 +1,17 @@
 {
   "name": "scaffoldor",
-  "version": "1.0.0",
-  "description": "Download templates from GitHub with ease",
+  "version": "1.1.0",
+  "description": "Scaffold new projects from GitHub or GitLab templates with a single command",
   "type": "module",
   "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "bin": {
     "scaffoldor": "./dist/index.js"
   },
@@ -11,14 +19,55 @@
     "build": "tsup",
     "dev": "tsup src/index.ts --format esm --watch",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "npm run build"
+    "check-types": "tsc --noEmit",
+    "test": "bun run build && bun test",
+    "prepublishOnly": "npm run typecheck && npm run build"
   },
-  "keywords": ["cli", "scaffold", "template", "generator"],
-  "license": "MIT",
+  "keywords": [
+    "cli",
+    "scaffold",
+    "scaffolding",
+    "template",
+    "templates",
+    "generator",
+    "boilerplate",
+    "starter",
+    "starter-kit",
+    "project-generator",
+    "github",
+    "gitlab",
+    "nextjs",
+    "hono",
+    "elysia",
+    "nestjs",
+    "bun",
+    "nodejs",
+    "typescript",
+    "developer-tools"
+  ],
+  "author": "Scaffoldor Contributors",
+  "license": "Apache-2.0",
+  "homepage": "https://scaffoldor.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itstheanurag/scaffoldor.git",
+    "directory": "apps/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/itstheanurag/scaffoldor/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=18"
   },
-  "files": ["dist"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
   "dependencies": {
     "commander": "^12.1.0",
     "fs-extra": "^11.2.0",

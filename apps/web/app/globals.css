@@ -2,7 +2,7 @@
 
 :root {
   --background: oklch(14.5% 0 0);
-  --foreground: oklch(92.2% 0 0);
+  --foreground: oklch(88% 0 0);
 
   /* Selection */
   --selection-bg: oklch(32% 0.02 250);

@@ -4,9 +4,16 @@ import { motion } from "motion/react";
 import { useState, useEffect } from "react";
 
 const steps = [
-  { type: "command", text: "npx scaffoldor init my-app" },
+  {
+    type: "command",
+    text: "npx scaffoldor @ayushchugh/backend my-app",
+  },
   { type: "output", text: " " },
-  { type: "prompt", text: "Select a template:", value: "nextjs-starter" },
+  {
+    type: "prompt",
+    text: "How should git history be handled?",
+    value: "fresh",
+  },
   { type: "prompt", text: "Select package manager:", value: "pnpm" },
   { type: "output", text: " " },
   { type: "process", text: "Resolving packages..." },
@@ -18,8 +25,10 @@ const steps = [
   { type: "info", text: "pnpm dev" },
 ];
 
+type Step = (typeof steps)[number];
+
 export function CliOutputShowcase() {
-  const [displayedSteps, setDisplayedSteps] = useState<any[]>([]);
+  const [displayedSteps, setDisplayedSteps] = useState<Step[]>([]);
 
   useEffect(() => {
     let isMounted = true;
@@ -35,17 +44,17 @@ export function CliOutputShowcase() {
         setDisplayedSteps((prev) => [...prev, step]);
 
         // Calculate how long to wait before showing the next step
-        let waitTime = 100; // Base minimal delay
+        let waitTime = 150; // Base delay between lines
 
         if (step.type === "command") {
-          // Wait for typing (50ms char) + buffer
-          waitTime = step.text.length * 50 + 500;
+          // Wait for typing (30ms char) + buffer
+          waitTime = step.text.length * 30 + 300;
         } else if (step.type === "process") {
-          waitTime = 600;
+          waitTime = 450;
         } else if (step.type === "prompt") {
-          waitTime = 800; // Wait for "user" to select
+          waitTime = 600; // Wait for "user" to select
         } else if (step.type === "success") {
-          waitTime = 1000;
+          waitTime = 800;
         }
 
         await new Promise((resolve) => setTimeout(resolve, waitTime));
@@ -70,7 +79,7 @@ export function CliOutputShowcase() {
           className="mb-1"
         >
           {step.type === "command" && (
-            <div className="flex items-center gap-2 text-white">
+            <div className="flex items-center gap-2 text-neutral-200">
               <span className="text-blue-500">➜</span>
               <span className="text-cyan-400">~</span>
               <Typewriter text={step.text} />
@@ -79,7 +88,7 @@ export function CliOutputShowcase() {
           {step.type === "prompt" && (
             <div className="flex items-center gap-2">
               <span className="text-green-500">?</span>
-              <span className="font-bold text-white">{step.text}</span>
+              <span className="font-bold text-neutral-200">{step.text}</span>
               <span className="text-cyan-500">{step.value}</span>
             </div>
           )}
@@ -119,7 +128,7 @@ function Typewriter({ text }: { text: string }) {
       } else {
         clearInterval(interval);
       }
-    }, 50); // Matches the 50ms/char calculation in parent
+    }, 30); // Matches the 30ms/char calculation in parent
     return () => clearInterval(interval);
   }, [text]);
 

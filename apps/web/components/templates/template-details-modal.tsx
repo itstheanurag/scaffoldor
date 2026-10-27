@@ -1,7 +1,12 @@
 "use client";
 
-import { CommunityTemplateWithUsername } from "@/lib/registry";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { CommunityTemplateWithUsername, getDisplayTags } from "@/lib/registry";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import {
   FaGithub,
@@ -16,6 +21,7 @@ import {
 import useSWR from "swr";
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion, useSpring, useTransform } from "motion/react";
+import { formatFramework, formatLabel, toTitleCase } from "@/lib/format";
 
 interface TemplateDetailsModalProps {
   isOpen: boolean;
@@ -43,7 +49,8 @@ export function TemplateDetailsModal({
 }: TemplateDetailsModalProps) {
   const [copied, setCopied] = useState(false);
 
-  const scaffoldCommand = `scaffoldor @${template._username}/${template.slug}`;
+  const scaffoldCommand = `npx scaffoldor @${template._username}/${template.slug}`;
+  const displayTags = getDisplayTags(template);
 
   const copyCommand = async () => {
     await navigator.clipboard.writeText(scaffoldCommand);
@@ -59,13 +66,13 @@ export function TemplateDetailsModal({
   const getApiUrl = () => {
     if (!shouldFetch) return null;
     try {
-      const urlParts = template.url.split("/");
-      // Handle trailing slash if present
-      const cleanParts = urlParts.filter((p) => p.length > 0);
-      const owner = cleanParts[cleanParts.length - 2];
-      const repo = cleanParts[cleanParts.length - 1];
+      const { pathname } = new URL(template.url);
+      // Only owner/repo are meaningful; ignore /tree/branch/subdir segments.
+      const [owner, repo] = pathname.split("/").filter(Boolean);
       if (owner && repo) {
-        return `https://api.github.com/repos/${owner}/${repo}`;
+        return `https://api.github.com/repos/${encodeURIComponent(
+          owner,
+        )}/${encodeURIComponent(repo)}`;
       }
     } catch {
       return null;
@@ -91,11 +98,6 @@ export function TemplateDetailsModal({
         <Dialog open={isOpen} onOpenChange={onClose}>
           <DialogContent className="max-w-2xl bg-neutral-900 border border-neutral-800 p-0 overflow-hidden sm:rounded-2xl block">
             <div className="relative">
-              {/* Premium Background Glow */}
-              {template.tier === "premium" && (
-                <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 blur-[100px] pointer-events-none" />
-              )}
-
               {/* Header Section */}
               <div className="p-6 md:p-8 space-y-6">
                 <div className="flex items-start justify-between">
@@ -111,16 +113,20 @@ export function TemplateDetailsModal({
                           </Badge>
                         )}
                       </div>
-                      <DialogTitle className="text-2xl md:text-3xl font-bold text-white">
-                        {template.name}
+                      <DialogTitle className="text-2xl md:text-3xl font-bold text-neutral-200">
+                        {toTitleCase(template.name)}
                       </DialogTitle>
+                      <DialogDescription className="sr-only">
+                        Preview details and the scaffold command for{" "}
+                        {template.name} by {template.author.name}.
+                      </DialogDescription>
                     </div>
                   </div>
                   <a
                     href={template.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 rounded-full bg-neutral-800/50 hover:bg-neutral-800 text-neutral-400 hover:text-white transition-all"
+                    className="p-2 rounded-full bg-neutral-800/50 hover:bg-neutral-800 text-neutral-400 hover:text-neutral-100 transition-all"
                   >
                     {template.platform === "gitlab" ? (
                       <FaGitlab size={24} />
@@ -135,7 +141,7 @@ export function TemplateDetailsModal({
                   <div className="grid grid-cols-3 gap-4">
                     <div className="bg-neutral-950/50 rounded-xl p-4 border border-neutral-800 flex flex-col items-center justify-center gap-1">
                       <FaStar className="text-amber-400 text-lg mb-1" />
-                      <span className="text-2xl font-bold text-white">
+                      <span className="text-2xl font-bold text-neutral-200">
                         <AnimatedNumber value={stats.stars} />
                       </span>
                       <span className="text-xs text-neutral-500 font-medium uppercase tracking-wider">
@@ -144,7 +150,7 @@ export function TemplateDetailsModal({
                     </div>
                     <div className="bg-neutral-950/50 rounded-xl p-4 border border-neutral-800 flex flex-col items-center justify-center gap-1">
                       <FaCodeBranch className="text-blue-400 text-lg mb-1" />
-                      <span className="text-2xl font-bold text-white">
+                      <span className="text-2xl font-bold text-neutral-200">
                         <AnimatedNumber value={stats.forks} />
                       </span>
                       <span className="text-xs text-neutral-500 font-medium uppercase tracking-wider">
@@ -153,7 +159,7 @@ export function TemplateDetailsModal({
                     </div>
                     <div className="bg-neutral-950/50 rounded-xl p-4 border border-neutral-800 flex flex-col items-center justify-center gap-1">
                       <FaExclamationCircle className="text-emerald-400 text-lg mb-1" />
-                      <span className="text-2xl font-bold text-white">
+                      <span className="text-2xl font-bold text-neutral-200">
                         <AnimatedNumber value={stats.open_issues} />
                       </span>
                       <span className="text-xs text-neutral-500 font-medium uppercase tracking-wider">
@@ -176,16 +182,16 @@ export function TemplateDetailsModal({
                           variant="outline"
                           className="px-3 py-1 text-sm bg-neutral-900 border-neutral-700 text-neutral-300"
                         >
-                          {template.framework}
+                          {formatFramework(template.framework)}
                         </Badge>
                       )}
                     <Badge
                       variant="outline"
                       className="px-3 py-1 text-sm bg-neutral-900 border-neutral-700 text-neutral-300"
                     >
-                      {template.type}
+                      {formatLabel(template.type)}
                     </Badge>
-                    {template.tags.map((tag, i) => (
+                    {displayTags.map((tag, i) => (
                       <Badge
                         key={`${tag}-${i}`}
                         variant="secondary"
@@ -208,7 +214,7 @@ export function TemplateDetailsModal({
                             className="flex items-center gap-3 text-neutral-300"
                           >
                             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-                            <span className="capitalize">{feature}</span>
+                            <span>{formatLabel(feature)}</span>
                           </li>
                         ))}
                       </ul>

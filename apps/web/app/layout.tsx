@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import {
+  SITE_DESCRIPTION,
+  SITE_KEYWORDS,
+  SITE_NAME,
+  SITE_TITLE,
+  SITE_URL,
+  SOCIAL_IMAGE,
+} from "@/lib/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,38 +21,37 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Scaffoldor - Download templates from GitHub with ease",
-  description:
-    "The easiest way to scaffold your projects using templates from GitHub. Supports multiple frameworks and package managers.",
-  alternates: {
-    canonical: "https://scaffoldor.vercel.app",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: SITE_TITLE,
+    template: `%s | ${SITE_NAME}`,
   },
+  description: SITE_DESCRIPTION,
+  keywords: SITE_KEYWORDS,
+  applicationName: SITE_NAME,
+  authors: [{ name: "Scaffoldor Contributors", url: SITE_URL }],
+  creator: "Scaffoldor Contributors",
   openGraph: {
-    title: "Scaffoldor - Download templates from GitHub with ease",
-    description:
-      "Scaffold your projects using templates from GitHub with ease.",
-    url: "https://scaffoldor.vercel.app",
-    siteName: "Scaffoldor",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    siteName: SITE_NAME,
     locale: "en_US",
     type: "website",
-    images: [
-      {
-        url: "/scaffoldor.png",
-        width: 1200,
-        height: 630,
-        alt: "Scaffoldor - Projects scaffolding made easy",
-      },
-    ],
+    images: [SOCIAL_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Scaffoldor - Download templates from GitHub with ease",
-    description:
-      "Scaffold your projects using templates from GitHub with ease.",
-    images: ["/scaffoldor.png"],
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [SOCIAL_IMAGE.url],
   },
   icons: {
     icon: "/favicon.ico",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 

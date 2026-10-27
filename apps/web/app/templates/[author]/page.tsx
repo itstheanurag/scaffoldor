@@ -2,11 +2,12 @@ import { getAuthorTemplates, getAllAuthors } from "@/lib/registry";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Metadata } from "next";
-import { BsArrowLeft, BsGithub, BsBoxArrowUpRight } from "react-icons/bs";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { BsArrowLeft, BsGithub, BsArrowUpRight } from "react-icons/bs";
 import { TemplateCard } from "@/components/templates/template-card";
 import { Footer } from "@/components/footer";
+import { Navbar } from "@/components/navbar";
+import { JsonLd } from "@/components/json-ld";
+import { SITE_URL } from "@/lib/site";
 
 interface AuthorPageProps {
   params: Promise<{
@@ -27,20 +28,26 @@ export async function generateMetadata({
 
   if (templates.length === 0) {
     return {
-      title: "Author Not Found | Scaffoldor",
+      title: "Author not found",
     };
   }
 
   const authorName = templates[0]?.author?.name || author;
+  const description = `Browse ${templates.length} production-ready template${
+    templates.length === 1 ? "" : "s"
+  } published by ${authorName} on Scaffoldor.`;
 
   return {
-    title: `${authorName}'s Templates | Scaffoldor`,
-    description: `Browse ${templates.length} production-ready templates by ${authorName}. Find the perfect starting point for your next project.`,
+    title: `${authorName}'s templates`,
+    description,
+    alternates: {
+      canonical: `/templates/${author}`,
+    },
     openGraph: {
-      title: `${authorName}'s Templates | Scaffoldor`,
-      description: `Browse ${templates.length} production-ready templates by ${authorName}. Find the perfect starting point for your next project.`,
-      type: "website",
-      siteName: "Scaffoldor",
+      title: `${authorName}'s templates`,
+      description,
+      url: `/templates/${author}`,
+      type: "profile",
     },
   };
 }
@@ -54,62 +61,78 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
   }
 
   const authorName = templates[0]?.author?.name || author;
+  const githubHandle = templates[0]?.author?.github || author;
+  const githubUrl = `https://github.com/${githubHandle}`;
+  const initial = authorName.charAt(0).toUpperCase();
+
+  const profileData = {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    url: `${SITE_URL}/templates/${author}`,
+    mainEntity: {
+      "@type": "Person",
+      name: authorName,
+      alternateName: `@${author}`,
+      url: githubUrl,
+    },
+  };
 
   return (
-    <div className="flex h-screen flex-col bg-black overflow-hidden">
-      {/* Fixed Top Header */}
-      <header className="flex items-center justify-between w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+    <div className="min-h-screen bg-neutral-950 text-neutral-200">
+      <JsonLd data={profileData} />
+      <Navbar />
+
+      <main className="mx-auto max-w-7xl px-4 pb-20 pt-24 sm:px-6 md:pt-32 lg:px-8">
         <Link
           href="/templates"
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-400 hover:text-white bg-neutral-900 hover:bg-neutral-800 rounded-full transition-all border border-neutral-800"
+          className="inline-flex items-center gap-2 text-sm font-medium text-neutral-500 transition-colors hover:text-neutral-100"
         >
-          <BsArrowLeft className="text-lg" />
-          <span>All Templates</span>
+          <BsArrowLeft />
+          All templates
         </Link>
 
-        <div className="flex items-center gap-2">
-          <h4 className="text-lg md:text-xl font-semibold text-neutral-300 tracking-tight">
-            {authorName}'s Templates
-          </h4>
+        <header className="mt-8 flex flex-col gap-6 border-b border-white/[0.07] pb-10 sm:flex-row sm:items-end sm:justify-between">
+          <div className="flex items-center gap-5">
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-400/[0.07] text-2xl font-semibold text-emerald-300">
+              {initial}
+            </div>
+            <div>
+              <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-neutral-500">
+                Contributor
+              </p>
+              <h1 className="mt-1 text-3xl font-semibold tracking-tight text-neutral-300 md:text-4xl">
+                {authorName}
+              </h1>
+              <p className="mt-1 text-sm text-neutral-500">
+                @{author} · {templates.length} template
+                {templates.length === 1 ? "" : "s"}
+              </p>
+            </div>
+          </div>
+
           <a
-            href={`https://github.com/${author}`}
+            href={githubUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-neutral-400 hover:text-white transition-colors"
+            className="inline-flex w-fit items-center gap-2 rounded-lg border border-neutral-800 bg-neutral-900 px-4 py-2.5 text-sm font-medium text-neutral-300 transition-colors hover:border-neutral-700 hover:text-neutral-100"
           >
-            <BsGithub className="text-xl" />
+            <BsGithub />
+            View on GitHub
+            <BsArrowUpRight className="text-xs text-neutral-500" />
           </a>
-        </div>
-      </header>
+        </header>
 
-      {/* Main Content Area - Scrollable */}
-      <main className="flex-1 w-full overflow-hidden">
-        <div className="h-full container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
-          {/* Author Stats */}
-          <div className="mb-8">
-            <p className="text-neutral-400">
-              {templates.length} template{templates.length !== 1 ? "s" : ""}{" "}
-              available
-            </p>
-          </div>
-
-          {/* Templates Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {templates.map((template) => (
-              <Link
-                key={template.slug}
-                href={`/templates/${author}/${template.slug}`}
-                className="block"
-              >
-                <TemplateCard
-                  template={{
-                    ...template,
-                    _username: author,
-                  }}
-                />
-              </Link>
-            ))}
-          </div>
+        <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {templates.map((template, index) => (
+            <TemplateCard
+              key={template.slug}
+              index={index}
+              template={{
+                ...template,
+                _username: author,
+              }}
+            />
+          ))}
         </div>
       </main>
 

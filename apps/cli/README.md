@@ -1,146 +1,215 @@
-# 🏗️ Scaffoldor CLI
+# Scaffoldor CLI
 
 [![npm version](https://img.shields.io/npm/v/scaffoldor.svg)](https://www.npmjs.com/package/scaffoldor)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![npm downloads](https://img.shields.io/npm/dm/scaffoldor.svg)](https://www.npmjs.com/package/scaffoldor)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Node.js](https://img.shields.io/node/v/scaffoldor.svg)](https://nodejs.org/)
 
-**Scaffoldor** is a powerful community-driven CLI tool designed to streamline the process of starting new projects by providing a centralized registry of production-ready templates. Stop wasting time hunting for your favorite starter kits—bring them all into one place.
+**Scaffold new projects from GitHub or GitLab templates with a single command.**
 
----
+Scaffoldor is a community-driven template registry and CLI. Discover a
+template, clone it into a clean project, choose how git and your package
+manager should be handled, and start building.
 
-## 🌟 Features
+## Features
 
-- **🚀 Instant Scaffolding**: Download and initialize templates from GitHub/GitLab in seconds.
-- **👥 Community Registry**: Access a curated list of templates shared by the community.
-- **🏷️ Scoped Templates**: Find templates using the intuitive `@username/template` format.
-- **🔍 Powerful Search**: Discover templates by name, framework, type, or author.
-- **📦 Local Registry**: Add your own custom private or public templates to your local machine.
-- **⚡ Built for Speed**: Native support for Bun, with seamless fallback for Node.js environments.
+- **One-command scaffolding** — `scaffoldor @author/template my-app`
+- **GitHub, GitLab, and custom Git hosts** — including URLs that point at a
+  branch or subdirectory.
+- **Clean starts** — keep the original history, create a fresh repository, or
+  remove git entirely.
+- **Package manager aware** — detects npm, pnpm, yarn, and bun, and can switch
+  the template to your preferred manager.
+- **Community registry** — search and list curated templates, with a local
+  cache for offline use.
+- **Private/local templates** — add your own templates under `@local` and keep
+  them across registry syncs.
+- **Scriptable** — `--json` output, non-interactive flags, and no prompts in CI.
 
----
-
-## 💻 Installation
+## Installation
 
 ```bash
-# Using Bun (Recommended)
-bun add -g scaffoldor
-
-# Using npm
+# npm
 npm install -g scaffoldor
 
-# Using yarn
+# pnpm
+pnpm add -g scaffoldor
+
+# yarn
 yarn global add scaffoldor
+
+# bun
+bun add -g scaffoldor
 ```
 
----
-
-## 🚀 Quick Start
-
-Start a new project in two commands:
+Requires Node.js 18 or newer. No installation is required to try it:
 
 ```bash
-# 1. Sync the latest community registry
+npx scaffoldor list --remote
+```
+
+## Quick start
+
+```bash
+# Refresh the community registry (optional; commands can fetch remotely)
 scaffoldor sync
 
-# 2. Scaffold a template
-scaffoldor @owner/nextjs-starter ./my-new-app
-```
-
----
-
-## 📖 Comprehensive Usage Guide
-
-### 1. Scaffolding Templates
-
-The core command for starting a new project. Supported formats include `@username/slug` and `username/slug`.
-
-```bash
-# Basic usage
-scaffoldor @ayushchug/backend
-
-# Specify destination directory
-scaffoldor ayushchug/webapp ./projects/my-app
-```
-
-### 2. Discovering Templates
-
-Explore the local and remote registries to find the perfect starter for your next project.
-
-```bash
-# List all templates in your local cache
-scaffoldor list
-
-# List all templates in the remote community registry
+# Browse templates
 scaffoldor list --remote
 
-# Filter by author
-scaffoldor list -a ayushchug
-
-# Filter by type and framework
-scaffoldor list --type frontend --framework nextjs
+# Scaffold one
+scaffoldor @itstheanurag/nest-backend my-app
 ```
 
-### 3. Searching for Specific Needs
+## Commands
 
-Search through descriptions, tags, and names to find exactly what you need.
+| Command                             | Description                                     |
+| ----------------------------------- | ----------------------------------------------- |
+| `scaffoldor <slug> [dest]`          | Scaffold a template (default command)           |
+| `scaffoldor scaffold <slug> [dest]` | Explicit form of the same command               |
+| `scaffoldor list`                   | List templates in the local cache               |
+| `scaffoldor search <query>`         | Search local and remote templates               |
+| `scaffoldor sync`                   | Download the latest community registry          |
+| `scaffoldor add <slug> <url>`       | Add or update a template in your local registry |
+
+Templates can be referenced as `@author/slug`, `author/slug`, or a bare `slug`
+when the slug is unique.
+
+### Scaffold options
+
+| Option                 | Description                                                  |
+| ---------------------- | ------------------------------------------------------------ |
+| `-g, --git <strategy>` | `keep` original history, `fresh` repository, or `remove` git |
+| `-p, --pm <manager>`   | `npm`, `pnpm`, `yarn`, or `bun`                              |
+| `-f, --force`          | Allow writing into a non-empty destination                   |
+| `-y, --yes`            | Skip prompts and use defaults                                |
 
 ```bash
-# Basic search
-scaffoldor search react
+# Non-interactive setup for CI or scripts
+scaffoldor @ayushchugh/backend my-api --git fresh --pm pnpm --yes
 
-# Search within a specific author's portfolio
-scaffoldor search starter -a ayushchug
+# Scaffold into the current (empty) directory
+scaffoldor @ayushchugh/webapp .
+
+# Add files to an existing directory (explicit opt-in)
+scaffoldor @ayushchugh/webapp ./existing --force
 ```
 
-### 4. Registry Management
+Without `--git`, the CLI prompts when running in a terminal and uses `fresh`
+when it is not interactive.
 
-Keep your templates up to date or add your own to your personal collection.
+### List and search
 
 ```bash
-# Sync with the community registry
+# Local cache only
+scaffoldor list
+
+# Include the remote registry
+scaffoldor list --remote
+
+# Filter by type, framework, or author
+scaffoldor list --type backend --framework nestjs
+scaffoldor list --author itstheanurag
+scaffoldor list --author @ravixstudio
+
+# Search names, descriptions, tags, features, and authors
+scaffoldor search postgres
+scaffoldor search nextjs --type fullstack
+
+# Machine-readable output
+scaffoldor list --remote --json
+scaffoldor search hono --json
+```
+
+`--author` accepts both the registry username (for example `ayushchugh`) and
+the author's GitHub handle (for example `ravixstudio`).
+
+### Add a local template
+
+```bash
+scaffoldor add my-private-kit https://github.com/me/private-kit \
+  --type fullstack \
+  --framework nextjs \
+  --description "Internal starter" \
+  --tags "typescript,auth,drizzle" \
+  --features "rbac,data-tables"
+
+# Local templates are stored under @local
+scaffoldor @local/my-private-kit ./my-app
+```
+
+Local templates survive `scaffoldor sync`. Invalid slugs, URLs, types, and
+frameworks are rejected before anything is written, so a typo cannot corrupt
+your registry.
+
+### Sync
+
+```bash
 scaffoldor sync
-
-# Add a local shortcut for a private or unlisted template
-scaffoldor add my-private-kit https://github.com/me/private-kit --type fullstack
 ```
 
----
+Sync replaces the cached community templates with the latest remote registry
+and preserves templates you added under `@local`. If the local registry file
+is ever corrupt, Scaffoldor backs it up and starts from a clean registry
+instead of crashing.
 
-## 🤔 When to Use Scaffoldor?
+## Template URL formats
 
-### ✅ Use it when:
+```text
+https://github.com/owner/repo
+https://github.com/owner/repo/tree/main
+https://github.com/owner/repo/tree/main/apps/web
+https://gitlab.com/group/subgroup/repo
+https://gitlab.com/group/subgroup/repo/-/tree/main/packages/app
+```
 
-- **Consistent Starters**: You frequently start new projects and want a consistent foundation.
-- **Team Standards**: You want to share "golden path" templates across your organization or team.
-- **Community Discovery**: You want to explore high-quality starters from the community without searching GitHub manually.
-- **Modular Repos**: You manage a monorepo or collection of templates and want a single point of entry.
+`git@github.com:owner/repo.git` and `ssh://git@github.com/owner/repo.git` are
+accepted by `add` and normalised to HTTPS. `file://` URLs are supported for
+local testing and private offline repositories.
 
-### ❌ Don't use it when:
+## Environment variables
 
-- **One-off Prototyping**: If you just need to clone a repo once and never touch it again, a standard `git clone` is faster.
-- **Complex Environment Setup**: Scaffoldor handles the code and repo initialization, but it is not an environment manager (like Docker or Nix).
+| Variable                      | Purpose                                                     |
+| ----------------------------- | ----------------------------------------------------------- |
+| `SCAFFOLDOR_HOME`             | Override the local data directory (default `~/.scaffoldor`) |
+| `SCAFFOLDOR_REGISTRY_URL`     | Use a custom registry JSON URL                              |
+| `SCAFFOLDOR_REGISTRY_TIMEOUT` | Registry request timeout in milliseconds (default `15000`)  |
+| `SCAFFOLDOR_DEBUG`            | Print stack traces for unexpected errors                    |
 
----
+## Troubleshooting
 
-## 📂 Template Metadata Structure
+**The registry is empty.** Run `scaffoldor sync` or use
+`scaffoldor list --remote`.
 
-Templates in the registry include rich metadata to help you choose:
+**A template is not found.** Run `scaffoldor search <query>` or use the full
+`@author/slug` form. Use `scaffoldor list --remote -a <author>` to list an
+author's templates.
 
-- **Type**: `frontend`, `backend`, `fullstack`, `mobile`, `cli`, `library`.
-- **Framework**: Support for React, Next.js, Hono, Elysia, Astro, SvelteKit, and many more.
-- **Features**: List of included features like Auth, Database, API Routes, etc.
+**Cloning fails with an authentication error.** The template repository is
+private or has been moved. Make sure your local git credentials can clone the
+URL directly.
 
----
+**The local registry was invalid.** Scaffoldor prints the backup path and
+starts with an empty registry. Running `scaffoldor sync` restores the community
+templates.
 
-## 🤝 Contributing
+**Prompts are skipped.** Prompts only run in an interactive terminal. Use
+`--git` and `--pm` to set values explicitly in CI.
 
-We love contributions! If you have a template you'd like to share:
+## Contributing templates
 
-1. Visit the [Scaffoldor Registry](https://github.com/itstheanurag/scaffoldor) repository.
-2. Follow the instructions in `CONTRIBUTING.md` to add your JSON entry.
-3. Open a Pull Request!
+The community registry lives in
+[`content/templates`](https://github.com/itstheanurag/scaffoldor/tree/main/content/templates).
+Add your template's JSON file and open a pull request. See the
+[template contribution guide](https://github.com/itstheanurag/scaffoldor/blob/main/content/templates/CONTRIBUTING.md).
 
----
+## Links
 
-## 📄 License
+- [Website and template directory](https://scaffoldor.vercel.app)
+- [Source code](https://github.com/itstheanurag/scaffoldor)
+- [Issues](https://github.com/itstheanurag/scaffoldor/issues)
+- [Changelog](./CHANGELOG.md)
 
-MIT © [Anurag](https://github.com/itstheanurag)
+## License
+
+Apache-2.0 © Scaffoldor Contributors
