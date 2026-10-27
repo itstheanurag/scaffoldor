@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastUpdated": "2026-04-11T11:32:51.122Z",
+  "lastUpdated": "2026-10-27T02:17:44.122Z",
   "templates": {
     "ayushchugh": [
       {
@@ -16,7 +16,6 @@
           "bun",
           "drizzle",
           "postgresql",
-          "bun",
           "oauth",
           "prometheus",
           "grafana",

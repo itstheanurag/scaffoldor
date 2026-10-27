@@ -1,10 +1,18 @@
-import { addTemplateToRegistry } from "../registry";
+import { addTemplateToRegistry, LOCAL_AUTHOR } from "../registry";
 import { UI } from "../helpers/ui";
 import {
-  CommunityTemplate,
-  TemplateTypeSchema,
-  FrameworkSchema,
+  CommunityTemplateSchema,
+  formatZodError,
+  type CommunityTemplate,
+  type SourcePlatform,
 } from "@repo/schema";
+import {
+  parseCommaSeparated,
+  normalizeFramework,
+  normalizeType,
+} from "../helpers/options";
+import { CliError } from "../helpers/errors";
+import { normalizeRepoUrl } from "../utils";
 
 export interface AddOptions {
   type: string;
@@ -12,6 +20,27 @@ export interface AddOptions {
   description?: string;
   tags?: string;
   features?: string;
+  name?: string;
+  license?: string;
+}
+
+function detectPlatform(url: string): SourcePlatform {
+  try {
+    const hostname = new URL(url).hostname.replace(/^www\./, "").toLowerCase();
+    if (hostname === "github.com") return "github";
+    if (hostname === "gitlab.com") return "gitlab";
+  } catch {
+    // normalizeRepoUrl already rejects malformed URLs.
+  }
+  return "custom";
+}
+
+function titleFromSlug(slug: string): string {
+  return slug
+    .split("-")
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
 }
 
 export async function addCommand(
@@ -19,49 +48,46 @@ export async function addCommand(
   url: string,
   options: AddOptions,
 ) {
-  // Validate type
-  const typeResult = TemplateTypeSchema.safeParse(options.type);
-  if (!typeResult.success) {
-    UI.warn(`Invalid type "${options.type}". Using "other".`);
-    options.type = "other";
+  const normalizedSlug = slug.trim().replace(/^@/, "");
+  if (normalizedSlug.includes("/")) {
+    throw new CliError(
+      `Invalid slug "${slug}". Use a plain slug such as "my-template" (without an author).`,
+    );
   }
 
-  // Validate framework
-  const frameworkResult = FrameworkSchema.safeParse(options.framework);
-  if (!frameworkResult.success) {
-    UI.warn(`Invalid framework "${options.framework}". Using "other".`);
-    options.framework = "other";
-  }
-
-  // Detect platform from URL
-  const platform = url.includes("github.com")
-    ? "github"
-    : url.includes("gitlab.com")
-      ? "gitlab"
-      : "custom";
+  const type = normalizeType(options.type);
+  const framework = normalizeFramework(options.framework);
+  const normalizedUrl = normalizeRepoUrl(url);
+  const name = options.name?.trim() || titleFromSlug(normalizedSlug);
 
   const template: CommunityTemplate = {
-    slug,
-    name: slug
-      .split("-")
-      .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
-      .join(" "),
-    url,
-    platform,
-    type: options.type as any,
-    framework: options.framework as any,
-    description: options.description,
-    tags: options.tags ? options.tags.split(",").map((t) => t.trim()) : [],
-    features: options.features
-      ? options.features.split(",").map((f) => f.trim())
-      : [],
+    slug: normalizedSlug,
+    name,
+    url: normalizedUrl,
+    platform: detectPlatform(normalizedUrl),
+    type: (type ?? "other") as CommunityTemplate["type"],
+    framework: (framework ?? "other") as CommunityTemplate["framework"],
+    description: options.description?.trim() || undefined,
+    tags: parseCommaSeparated(options.tags),
+    features: parseCommaSeparated(options.features),
     author: {
       name: "Local",
     },
     tier: "free",
-    license: "MIT",
+    license: options.license?.trim() || "MIT",
   };
 
-  await addTemplateToRegistry(template);
-  UI.success(`Template @${slug} added to local registry.`);
+  const result = CommunityTemplateSchema.safeParse(template);
+  if (!result.success) {
+    throw new CliError(`Invalid template:\n${formatZodError(result.error)}`);
+  }
+
+  const { updated } = await addTemplateToRegistry(result.data);
+
+  UI.success(
+    `Template @${LOCAL_AUTHOR}/${result.data.slug} ${
+      updated ? "updated in" : "added to"
+    } your local registry.`,
+  );
+  UI.dim(`Scaffold it with: scaffoldor @${LOCAL_AUTHOR}/${result.data.slug}`);
 }

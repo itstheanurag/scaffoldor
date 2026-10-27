@@ -69,9 +69,9 @@ export const PricingSchema = z.object({
  * Author information
  */
 export const AuthorSchema = z.object({
-  name: z.string().min(1),
-  github: z.string().optional(),
-  url: z.string().url().optional(),
+  name: z.string().trim().min(1),
+  github: z.string().trim().min(1).optional(),
+  url: z.string().trim().url().optional(),
 });
 
 /**
@@ -82,14 +82,15 @@ export const CommunityTemplateSchema = z.object({
   /** Unique slug for CLI usage (e.g., "nextjs-starter") */
   slug: z
     .string()
+    .trim()
     .min(1)
     .regex(/^[a-z0-9-]+$/, "Slug must be lowercase alphanumeric with hyphens"),
 
   /** Human-readable name */
-  name: z.string().min(1),
+  name: z.string().trim().min(1),
 
   /** Git repository URL */
-  url: z.string().url(),
+  url: z.string().trim().url(),
 
   /** Source platform (github, gitlab, custom) */
   platform: SourcePlatformSchema.default("github"),
@@ -101,13 +102,13 @@ export const CommunityTemplateSchema = z.object({
   framework: FrameworkSchema.default("other"),
 
   /** Short description */
-  description: z.string().optional(),
+  description: z.string().trim().optional(),
 
   /** Searchable tags */
-  tags: z.array(z.string()).default([]),
+  tags: z.array(z.string().trim().min(1)).default([]),
 
   /** Feature list for display */
-  features: z.array(z.string()).default([]),
+  features: z.array(z.string().trim().min(1)).default([]),
 
   /** Template author */
   author: AuthorSchema,
@@ -119,7 +120,7 @@ export const CommunityTemplateSchema = z.object({
   pricing: PricingSchema.optional(),
 
   /** License identifier */
-  license: z.string().default("MIT"),
+  license: z.string().trim().min(1).default("MIT"),
 });
 
 /**
@@ -128,7 +129,10 @@ export const CommunityTemplateSchema = z.object({
  */
 export const RegistrySchema = z.object({
   version: z.string().default("1.0.0"),
-  lastUpdated: z.string().datetime(),
+  lastUpdated: z
+    .string()
+    .datetime({ offset: true })
+    .default(() => new Date().toISOString()),
   templates: z.record(z.string(), z.array(CommunityTemplateSchema)),
 });
 
@@ -148,3 +152,16 @@ export type Author = z.infer<typeof AuthorSchema>;
 export type CommunityTemplate = z.infer<typeof CommunityTemplateSchema>;
 export type Registry = z.infer<typeof RegistrySchema>;
 export type UserTemplates = z.infer<typeof UserTemplatesSchema>;
+
+/**
+ * Turn a Zod validation error into a short, human-readable list of issues.
+ * Useful for CLI error messages without dumping a full JSON error object.
+ */
+export function formatZodError(error: z.ZodError): string {
+  return error.issues
+    .map((issue) => {
+      const location = issue.path.length > 0 ? issue.path.join(".") : "value";
+      return `  - ${location}: ${issue.message}`;
+    })
+    .join("\n");
+}

@@ -1,10 +1,10 @@
 <p align="center">
   <h1 align="center">Scaffoldor</h1>
   <p align="center">
-    <strong>A CLI tool for downloading and sharing GitHub/GitLab templates</strong>
+    <strong>Scaffold new projects from GitHub or GitLab templates in one command.</strong>
   </p>
   <p align="center">
-    Stop bookmarking template URLs. Start scaffolding with a single command.
+    Stop bookmarking template URLs. Start building.
   </p>
 </p>
 
@@ -12,7 +12,8 @@
   <a href="#features">Features</a> •
   <a href="#installation">Installation</a> •
   <a href="#quick-start">Quick Start</a> •
-  <a href="#usage">Usage</a> •
+  <a href="#commands">Commands</a> •
+  <a href="#web-app">Web App</a> •
   <a href="#contributing">Contributing</a>
 </p>
 
@@ -20,120 +21,151 @@
 
 ## Features
 
-- **One-command scaffolding** - Clone any template with `scaffoldor @template-name`
-- **Personal registry** - Save your favorite templates locally for quick access
-- **Package manager flexibility** - Automatically detects and lets you switch between npm, pnpm, yarn, or bun
-- **Clean starts** - Removes original git history and initializes a fresh repo
-- **Template directory** - Browse and discover popular templates (coming soon)
-
-## Demo
-
-<https://github.com/user-attachments/assets/0e3b86c6-d45b-4dc0-86e0-ce13897bcba0>
+- **One-command scaffolding** — `scaffoldor @author/template my-app`
+- **GitHub, GitLab, and custom Git hosts** — including branch and subdirectory URLs
+- **Clean starts** — keep the original history, create a fresh repository, or remove git entirely
+- **Package manager aware** — detects npm, pnpm, yarn, and bun, and can switch the template to your preferred manager
+- **Community registry** — search and list curated templates, with a local cache for offline use
+- **Private/local templates** — add your own templates under `@local` and keep them across registry syncs
+- **Scriptable** — `--json` output, non-interactive flags, and no prompts in CI
 
 ## Installation
 
 ```bash
-# Using npm
+# npm
 npm install -g scaffoldor
 
-# Using bun
-bun install -g scaffoldor
+# pnpm
+pnpm add -g scaffoldor
 
-# Using pnpm
-pnpm install -g scaffoldor
-
-# Using yarn
+# yarn
 yarn global add scaffoldor
+
+# bun
+bun add -g scaffoldor
+```
+
+Requires Node.js 18 or newer. No installation is required to try it:
+
+```bash
+npx scaffoldor list --remote
 ```
 
 ## Quick Start
 
 ```bash
-# Add a template from the registry
-scaffoldor add @nextjs-starter
+# Scaffold a template into a new directory
+npx scaffoldor @itstheanurag/nest-backend my-api
 
-# Add with a specific package manager
-scaffoldor add @express-api --pm bun
+# Browse the registry
+npx scaffoldor list --remote
 
-# List all available templates
+# Search by name, tag, or author
+npx scaffoldor search postgres
+
+# Refresh the local registry cache
+npx scaffoldor sync
+```
+
+Templates can be referenced as `@author/slug`, `author/slug`, or a bare `slug`
+when the slug is unique.
+
+## Commands
+
+| Command                             | Description                                   |
+| ----------------------------------- | --------------------------------------------- |
+| `scaffoldor <slug> [dest]`          | Scaffold a template (default command)         |
+| `scaffoldor scaffold <slug> [dest]` | Explicit form of the same command             |
+| `scaffoldor list`                   | List templates in the local cache             |
+| `scaffoldor search <query>`         | Search local and remote templates             |
+| `scaffoldor sync`                   | Download the latest community registry        |
+| `scaffoldor add <slug> <url>`       | Add or update a local template under `@local` |
+
+### Scaffold options
+
+| Option                 | Description                                                  |
+| ---------------------- | ------------------------------------------------------------ |
+| `-g, --git <strategy>` | `keep` original history, `fresh` repository, or `remove` git |
+| `-p, --pm <manager>`   | `npm`, `pnpm`, `yarn`, or `bun`                              |
+| `-f, --force`          | Allow writing into a non-empty destination                   |
+| `-y, --yes`            | Skip prompts and use defaults                                |
+
+```bash
+# Non-interactive setup for CI or scripts
+scaffoldor @ayushchugh/backend my-api --git fresh --pm pnpm --yes
+
+# Scaffold into the current (empty) directory
+scaffoldor @ayushchugh/webapp .
+
+# Add files to an existing directory (explicit opt-in)
+scaffoldor @ayushchugh/webapp ./existing --force
+
+# Use a repository URL directly (branches and subdirectories supported)
+scaffoldor https://github.com/owner/repo/tree/main/apps/web my-app
+```
+
+Without `--git`, the CLI prompts when running in a terminal and uses `fresh`
+when it is not interactive.
+
+### List and search
+
+```bash
+# Local cache only
 scaffoldor list
+
+# Include the remote registry
+scaffoldor list --remote
+
+# Filter by type, framework, or author
+scaffoldor list --type backend --framework nestjs
+scaffoldor list --author itstheanurag
+
+# Machine-readable output
+scaffoldor list --remote --json
+scaffoldor search nextjs --json
 ```
 
-## Usage
+### Local templates
 
-### Add a Template
-
-Add a template from the centralized registry to your project:
+`scaffoldor add` writes to your local registry rather than the community one,
+so private or work-in-progress templates stay on your machine:
 
 ```bash
-scaffoldor add @<template-name> [options]
+scaffoldor add my-starter https://github.com/me/my-starter --type fullstack
+scaffoldor @local/my-starter ./scratch
 ```
 
-**Options:**
+Local templates survive `scaffoldor sync`; corrupt local registries are backed
+up and rebuilt automatically.
 
-- `--pm <manager>` - Package manager to use (`npm`, `pnpm`, or `bun`)
+## Web App
 
-**Examples:**
+The `apps/web` package is the template directory at
+[scaffoldor.vercel.app](https://scaffoldor.vercel.app). It:
+
+- Lists every template in the registry with search and stack filters
+- Documents each template and its exact scaffold command
+- Generates a sitemap and structured data from `registry/registry.json`
+
+Run it locally with:
 
 ```bash
-# Add a Next.js template
-scaffoldor add @nextjs-basic
-
-# Add with a specific package manager
-scaffoldor add @express-api --pm pnpm
-
-# Add using bun and current directory
-scaffoldor add @fullstack-starter . --pm bun
-
-# paste template inside a directory
-scaffoldor add @fullstack-starter test-app --pm bun
-
+bun install
+bun run dev
 ```
-
-### List Templates
-
-Browse all available templates in the registry:
-
-```bash
-scaffoldor list
-```
-
-**Output:**
-
-```
-Available Templates:
-@nextjs-basic [frontend] - Basic Next.js starter
-@express-api [backend] - Express.js REST API starter
-@fullstack-starter [fullstack] - Full-stack TypeScript template
-```
-
-## How It Works
-
-1. **Centralized Registry**: Templates are curated in a community registry
-2. **Browse & Discover**: Use `list` to browse available templates
-3. **One-command Add**: Run `scaffoldor add @template-name` to scaffold
-4. **Package Manager**: Choose npm, pnpm, or bun with the `--pm` flag
-5. **Clean Slate**: Fresh project with your preferred setup
-
-## Roadmap
-
-- [ ] **Centralized registry** - Community-curated template directory
-- [ ] **Template search** - Search templates directly from CLI
-- [ ] **Likes/ratings** - Discover popular templates
-- [ ] **Template updates** - Check for and apply template updates
-- [ ] **Custom registries** - Connect to private/enterprise registries
 
 ## Project Structure
 
 This is a monorepo containing:
 
-| Package                      | Description                            |
-| ---------------------------- | -------------------------------------- |
-| `apps/cli`                   | The scaffoldor CLI tool                |
-| `apps/web`                   | Web application for template directory |
-| `packages/ui`                | Shared React components                |
-| `packages/eslint-config`     | Shared ESLint configuration            |
-| `packages/typescript-config` | Shared TypeScript configuration        |
+| Path                        | Description                                                |
+| --------------------------- | ---------------------------------------------------------- |
+| `apps/cli`                  | The `scaffoldor` CLI (published to npm)                    |
+| `apps/web`                  | Next.js template directory                                 |
+| `packages/schema`           | Zod schemas shared by the CLI, web app, and registry build |
+| `content/templates`         | Community template submissions                             |
+| `registry/registry.json`    | Compiled registry consumed by the CLI and web app          |
+| `scripts/build-registry.ts` | Validates submissions and builds the registry              |
 
 ## Contributing
 
@@ -144,14 +176,17 @@ We welcome contributions! See [CONTRIBUTING.md](./CONTRIBUTING.md) for:
 - Contribution guidelines
 - Code style
 
+To submit a template, follow
+[content/templates/CONTRIBUTING.md](./content/templates/CONTRIBUTING.md).
+
 For technical details, see [ARCHITECTURE.md](./ARCHITECTURE.md).
 
 ## License
 
-MIT © Scaffoldor Contributors
+Apache-2.0 © Scaffoldor Contributors
 
 ---
 
 <p align="center">
-  Made with for developers who love efficiency
+  Made for developers who love shipping.
 </p>

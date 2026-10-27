@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build and typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.3
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build registry
+        run: bun run build:registry
+
+      - name: Typecheck
+        run: bun run check-types
+
+      - name: Lint
+        run: bun run lint
+
+      - name: Build packages
+        run: bun run build
+
+      - name: Smoke test CLI
+        working-directory: apps/cli
+        run: |
+          node dist/index.js --version
+          node dist/index.js list --json > /dev/null
+          node dist/index.js --help > /dev/null

@@ -22,7 +22,8 @@ async function getUserDirs(): Promise<string[]> {
   for await (const dir of glob.scan({ cwd: CONTENT_DIR, onlyFiles: false })) {
     dirs.push(dir.replace("/", ""));
   }
-  return dirs;
+  // Keep registry key order deterministic between builds.
+  return dirs.sort();
 }
 
 async function loadUserTemplates(
@@ -61,8 +62,26 @@ async function buildRegistry(): Promise<void> {
     const templates = await loadUserTemplates(username);
 
     if (templates.length > 0) {
+      // Normalize free-form lists so downstream consumers do not render
+      // duplicate tags/features or duplicate React keys.
+      for (const template of templates) {
+        template.tags = [...new Set(template.tags)];
+        template.features = [...new Set(template.features)];
+      }
+
       // Sort templates by slug within each author
       templates.sort((a, b) => a.slug.localeCompare(b.slug));
+
+      const seenSlugs = new Set<string>();
+      for (const template of templates) {
+        if (seenSlugs.has(template.slug)) {
+          throw new Error(
+            `Duplicate template slug "@${username}/${template.slug}"`,
+          );
+        }
+        seenSlugs.add(template.slug);
+      }
+
       templatesByAuthor[username] = templates;
 
       for (const template of templates) {
@@ -71,9 +90,30 @@ async function buildRegistry(): Promise<void> {
     }
   }
 
+  // Keep lastUpdated stable when the template data did not change, so the
+  // sitemap does not report a new modification date on every build.
+  let lastUpdated = new Date().toISOString();
+  const outputFile = Bun.file(OUTPUT_FILE);
+  if (await outputFile.exists()) {
+    try {
+      const existing = (await outputFile.json()) as {
+        lastUpdated?: string;
+        templates?: unknown;
+      };
+      if (
+        existing.lastUpdated &&
+        JSON.stringify(existing.templates) === JSON.stringify(templatesByAuthor)
+      ) {
+        lastUpdated = existing.lastUpdated;
+      }
+    } catch {
+      // A corrupt existing registry should not block a rebuild.
+    }
+  }
+
   const registry = {
     version: "1.0.0",
-    lastUpdated: new Date().toISOString(),
+    lastUpdated,
     templates: templatesByAuthor,
   };
 
@@ -91,7 +131,7 @@ async function buildRegistry(): Promise<void> {
   const totalTemplates = Object.values(templatesByAuthor).flat().length;
   console.log("\nRegistry built successfully!");
   console.log(`  Output: ${OUTPUT_FILE}`);
-  console.log(`  Authors: ${userDirs.length}`);
+  console.log(`  Authors: ${Object.keys(templatesByAuthor).length}`);
   console.log(`  Templates: ${totalTemplates}`);
 }
 

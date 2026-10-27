@@ -1,43 +1,62 @@
 import { searchTemplates } from "../registry";
 import { UI } from "../helpers/ui";
+import {
+  normalizeAuthor,
+  normalizeFramework,
+  normalizeType,
+} from "../helpers/options";
+import { CliError } from "../helpers/errors";
 
 export interface SearchOptions {
   type?: string;
   framework?: string;
   author?: string;
+  json?: boolean;
 }
 
 export async function searchCommand(query: string, options: SearchOptions) {
-  UI.info(`Searching for "${query}"...`);
+  const type = normalizeType(options.type);
+  const framework = normalizeFramework(options.framework);
+  const author = normalizeAuthor(options.author);
 
-  const results = await searchTemplates({
-    query,
-    type: options.type,
-    framework: options.framework,
-  });
-
-  let filteredResults = results;
-  if (options.author) {
-    const normalizedAuthor = options.author.startsWith("@")
-      ? options.author.slice(1)
-      : options.author;
-    filteredResults = results.filter(
-      (t) => t.author.github === normalizedAuthor,
-    );
+  const normalizedQuery = query.trim();
+  if (!normalizedQuery) {
+    throw new CliError("Search query cannot be empty.");
   }
 
-  if (filteredResults.length === 0) {
-    if (options.author) {
+  if (!options.json) {
+    UI.info(`Searching for "${normalizedQuery}"...`);
+  }
+
+  const templates = await searchTemplates({
+    query: normalizedQuery,
+    type,
+    framework,
+    author,
+  });
+
+  const sorted = [...templates].sort((a, b) => {
+    const authorCompare = a.username.localeCompare(b.username);
+    return authorCompare !== 0 ? authorCompare : a.slug.localeCompare(b.slug);
+  });
+
+  if (options.json) {
+    console.log(JSON.stringify(sorted, null, 2));
+    return;
+  }
+
+  if (sorted.length === 0) {
+    if (author) {
       UI.warn(
-        `No templates found matching "${query}" for user '${options.author}'.`,
+        `No templates found matching "${normalizedQuery}" for user '@${author}'.`,
       );
     } else {
-      UI.warn(`No templates found matching "${query}".`);
+      UI.warn(`No templates found matching "${normalizedQuery}".`);
     }
     return;
   }
 
-  UI.header(`Found ${filteredResults.length} template(s):`);
+  UI.header(`Found ${sorted.length} template(s):`);
 
-  filteredResults.forEach((t) => UI.templateItem(t));
+  sorted.forEach((template) => UI.templateItem(template));
 }
