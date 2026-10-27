@@ -135,10 +135,9 @@ export async function readLocalRegistry(): Promise<Registry> {
 
     UI.warn(
       backedUp
-        ? `Your local registry was invalid and has been backed up to:\n  ${backupPath}`
-        : `Your local registry at ${LOCAL_REGISTRY_PATH} is invalid and could not be backed up.`,
+        ? `Your local registry was invalid and has been backed up to:\n  ${backupPath}\n\nRun "scaffoldor sync" to rebuild the local registry.`
+        : `Your local registry at ${LOCAL_REGISTRY_PATH} is invalid and could not be backed up.\n\nRun "scaffoldor sync" to rebuild the local registry.`,
     );
-    UI.dim('Run "scaffoldor sync" to rebuild the local registry.');
 
     return createEmptyRegistry();
   }

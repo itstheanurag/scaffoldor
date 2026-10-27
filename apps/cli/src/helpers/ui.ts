@@ -21,9 +21,10 @@ export const UI = {
 
   success: (text: string) => console.log(pc.green(`\n✅ ${text}`)),
 
-  error: (text: string) => console.log(pc.red(`\n❌ Error: ${text}`)),
+  warn: (text: string) => console.error(pc.yellow(`\n⚠ ${text}`)),
 
-  warn: (text: string) => console.log(pc.yellow(`\n⚠ ${text}`)),
+  // Errors and warnings go to stderr so `--json` stdout stays machine-readable.
+  error: (text: string) => console.error(pc.red(`\n❌ Error: ${text}`)),
 
   info: (text: string) => console.log(pc.blue(text)),
 

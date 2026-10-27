@@ -100,8 +100,9 @@ scaffoldor @ayushchugh/webapp .
 # Add files to an existing directory (explicit opt-in)
 scaffoldor @ayushchugh/webapp ./existing --force
 
-# Use a repository URL directly (branches and subdirectories supported)
-scaffoldor https://github.com/owner/repo/tree/main/apps/web my-app
+# Register a repository URL (branches and subdirectories supported), then use it
+scaffoldor add web-app https://github.com/owner/repo/tree/main/apps/web
+scaffoldor @local/web-app my-app
 ```
 
 Without `--git`, the CLI prompts when running in a terminal and uses `fresh`
