@@ -21,9 +21,26 @@ export function Community() {
     <>
       <section
         id="registry"
-        className="border-y border-neutral-800 bg-neutral-900/20 py-16 md:py-24"
+        className="relative overflow-hidden border-y border-neutral-800 bg-neutral-900/50 py-16 md:py-24"
       >
-        <div className="mx-auto grid max-w-7xl gap-12 px-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+        <svg
+          aria-hidden
+          className="pointer-events-none absolute inset-0 h-full w-full text-neutral-800/50"
+        >
+          <defs>
+            <pattern
+              id="registry-dots"
+              width="26"
+              height="26"
+              patternUnits="userSpaceOnUse"
+            >
+              <circle cx="1" cy="1" r="1" fill="currentColor" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#registry-dots)" />
+        </svg>
+
+        <div className="relative mx-auto grid max-w-7xl gap-12 px-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           {/* Copy */}
           <div>
             <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-neutral-500">
