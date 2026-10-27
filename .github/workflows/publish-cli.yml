@@ -13,9 +13,14 @@ jobs:
   publish:
     name: Publish to npm
     runs-on: ubuntu-latest
+    # Configure this environment in GitHub with required reviewers if you want
+    # a manual approval gate before a release reaches npm.
+    environment: release
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -25,11 +30,13 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          registry-url: https://registry.npmjs.org
+          node-version: 22
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
+
+      - name: Ensure npm supports trusted publishing
+        run: npm install -g npm@latest
 
       - name: Verify tag matches package version
         run: |
@@ -50,9 +57,8 @@ jobs:
 
       - name: Publish
         working-directory: apps/cli
+        # Trusted Publishing uses the GitHub OIDC token above. No NPM_TOKEN.
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
