@@ -13,7 +13,7 @@
     "./package.json": "./package.json"
   },
   "bin": {
-    "scaffoldor": "./dist/index.js"
+    "scaffoldor": "dist/index.js"
   },
   "scripts": {
     "build": "tsup",
